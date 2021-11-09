@@ -4,6 +4,7 @@ import bodyParser from 'koa-bodyparser'
 import cors from '@koa/cors'
 import servStatic from 'koa-static'
 import config from './config'
+import './db/mongo'
 
 const app = new Koa()
 
