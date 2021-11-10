@@ -6,10 +6,12 @@ import servStatic from 'koa-static'
 import config from './config'
 import router from './router'
 import './db/mongo'
+import intercept from './middlewares/intercept'
 
 const app = new Koa()
 
 app
+  .use(intercept())
   .use(cors())
   .use(compress({ threshold: 2048 }))
   .use(servStatic('./build'))
