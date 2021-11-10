@@ -43,7 +43,7 @@ const schema = new mongoose.Schema({
   },
   // 显示状态 true-正常 false-屏蔽内容
   status: {
-    ype: Boolean,
+    type: Boolean,
     default: true
   },
   // 删除状态

@@ -4,6 +4,7 @@ import bodyParser from 'koa-bodyparser'
 import cors from '@koa/cors'
 import servStatic from 'koa-static'
 import config from './config'
+import router from './router'
 import './db/mongo'
 
 const app = new Koa()
@@ -13,5 +14,6 @@ app
   .use(compress({ threshold: 2048 }))
   .use(servStatic('./build'))
   .use(bodyParser())
+  .use(router.routes())
 
 app.listen(config.port, () => console.log(`server started ${config.port}`))
