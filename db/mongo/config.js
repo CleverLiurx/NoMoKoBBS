@@ -1,11 +1,11 @@
 const isProduction = process.env.NODE_ENV === 'production'
 
-const database = isProduction ? 'basename' : 'basename'
+const database = isProduction ? 'basename' : 'nomokobbs'
 
-const user = isProduction ? 'root' : 'root'
-const pass = isProduction ? 'password' : 'pass_word'
+const user = isProduction ? 'root' : 'monikobbsroot'
+const pass = isProduction ? 'password' : 'nomoko20bbs21'
 
-const host = isProduction ? 'localhost' : 'localhost'
+const host = isProduction ? 'localhost' : '114.115.143.136'
 const port = isProduction ? 27017 : 27017
 
 // Details: https://segmentfault.com/q/1010000015330823?utm_source=tag-newest
