@@ -20,7 +20,7 @@ router.get('/captcha', ctx => {
  * 发送短信
  */
 router.post('/sms', async ctx => {
-  await redis.set('key1', 'value1', 3)
+  await redis.set('key1', 'value1', 5)
   await redis.set('keys', 'values')
   await redis.del('key2')
   console.log(await redis.get('key2'))
