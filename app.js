@@ -5,7 +5,7 @@ import cors from '@koa/cors'
 import servStatic from 'koa-static'
 import config from './config'
 import router from './router'
-import './db/mongo'
+import { mongoConnect } from './db'
 import intercept from './middlewares/intercept'
 
 const app = new Koa()
@@ -17,5 +17,8 @@ app
   .use(servStatic('./build'))
   .use(bodyParser())
   .use(router.routes())
+
+mongoConnect()
+  .then(() => console.log('mongodb connected successful'))
 
 app.listen(config.port, () => console.log(`server started ${config.port}`))

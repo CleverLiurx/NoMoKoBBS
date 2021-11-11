@@ -2,7 +2,7 @@ import svgCaptcha from 'svg-captcha'
 
 const codeConfig = {
   size: 5,
-  ignoreChars: '0o1i',
+  ignoreChars: '0oO1ilI',
   noise: 2,
   height: 44
 }

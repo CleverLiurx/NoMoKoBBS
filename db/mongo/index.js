@@ -1,9 +1,13 @@
 import mongoose from 'mongoose'
 import { connectionString, options } from './config'
 
-mongoose.connect(connectionString, { config: options })
-  .then(() => console.log('database conntcted successful'))
-
-const db = mongoose.connection
-
-export default db
+export default () => {
+  return new Promise((resolve, reject) => {
+    mongoose.connect(connectionString, { config: options })
+      .then(() => {
+        const db = mongoose.connection
+        resolve(db)
+      })
+      .catch(e => reject(e))
+  })
+}
