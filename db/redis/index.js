@@ -1,5 +1,5 @@
 import { createClient } from 'redis'
-import { connectionString, options } from './config'
+import { connectionString, options } from '../../config/redis'
 
 const client = createClient({ url: connectionString })
 

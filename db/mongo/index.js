@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { connectionString, options } from './config'
+import { connectionString, options } from '../../config/mongo'
 
 export default () => {
   return new Promise((resolve, reject) => {
