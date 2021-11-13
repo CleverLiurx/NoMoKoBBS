@@ -4,7 +4,7 @@ import { redis } from '../../../db'
 
 const router = koaRouter()
 
-// !!!此路由为不进行权限验证的api
+// !!!此路由为不进行权限验证的api: 获取图片验证码 发送短信验证码 注册 登录
 
 const imgCodeKey = phone => `img_code_${phone}` // 图片验证码存储的key
 const smsCodeKey = phone => `sms_code_${phone}` // 短信验证码存储的key
@@ -27,7 +27,9 @@ router.get('/captcha', async ctx => {
     const { phone } = ctx.query
     const { code, svg } = creatCaptcha()
     const key = imgCodeKey(phone)
-    await redis.set(key, code, 60 * 15) // 存储图片验证码，有效期15分钟
+    redis.set(key, code) // 存储图片验证码
+    redis.expire(key, 60 * 15) // 有效期15分钟
+    ctx.session.userId = 'rt846m12bacs6daw0erg'
     result = svg
   } catch (e) {
     result = 'Error'
@@ -54,9 +56,10 @@ router.post('/sms', async ctx => {
       result = '验证码错误'
     } else {
       const random6num = Math.random().toString().slice(-5)
-      await redis.del(imgKey) // 删除原图片验证码
+      redis.del(imgKey) // 删除原图片验证码
       result = await sendSms(phone, random6num) // 发送短信
-      await redis.set(smsKey, random6num, 60 * 2) // 存储短信验证码，120秒
+      redis.set(smsKey, random6num) // 存储短信验证码
+      redis.expire(smsKey, 60 * 2) // 有效期120s
     }
   } catch (e) {
     result = e

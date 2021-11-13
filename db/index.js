@@ -1,4 +1,5 @@
-import mongoConnect from './mongo'
+import mongoClient from './mongo'
+import { store } from './redis'
 import redis from './redis'
 
-export { mongoConnect, redis }
+export { mongoClient, store, redis }

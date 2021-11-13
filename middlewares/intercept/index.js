@@ -1,3 +1,6 @@
+import { redis } from '../../db'
+import { sessionKey, sessionTime } from '../../config/session'
+
 const isUnAuth = ctx => {
   const url = ctx.request.url
   let flag = false
@@ -10,6 +13,9 @@ const isUnAuth = ctx => {
 
 export default () => {
   return async (ctx, next) => {
+    const sessionId = ctx.cookies.get(sessionKey)
+    // console.log(sessionId)
+    // redis.expire(ctx.cookies.get('nomokobbs:sess'), sessionTime)
     if (isUnAuth(ctx)) {
       await next()
     } else {

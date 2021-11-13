@@ -1,37 +1,30 @@
-import { createClient } from 'redis'
-import { connectionString, options } from '../../config/redis'
+import Redis from 'ioredis'
+import config from '../../config/redis'
 
-const client = createClient({ url: connectionString })
+const redis = new Redis(config)
 
-client.on('connect', () => console.log('redis connected successful'))
-client.on('error', err => console.log(err))
+redis.on('connect', () => console.log('redis connected successful'))
 
-const set = async (key, value, time) => {
-  try {
-    await client.set(key, value)
-    if (time) {
-      await client.expire(key, parseInt(time))
+// store用于session的存储
+const store = {
+  async get(key, maxAge, { rolling }) {
+    console.log('get', key, maxAge, rolling)
+    let res = await redis.hgetall(key).then(r => r).catch(e => ({ error: e }))
+    return res
+  },
+  async set(key, sess, maxAge, { rolling, changed }) {
+    console.log('set', key, sess, maxAge, rolling, changed)
+    if (changed) {
+      let seconds = Math.floor(maxAge / 1000) // koa-session默认时间单位时ms->s
+      redis.hmset(key, sess)
+      redis.expire(key, seconds)
     }
-    return 1
-  } catch (e) {
-    await client.del(key)
-    return 0
+  },
+  async destroy(key) {
+    console.log('destory', key)
+    await redis.del(key)
   }
 }
 
-const get = async key => {
-  return new Promise(resolve => {
-    client.get(key, (err, value) => {
-      if (!err) {
-        resolve(value)
-      }
-      resolve(null)
-    })
-  })
-}
-
-const del = async key => {
-  return await client.del(key)
-}
-
-export default { set, get, del }
+export { store }
+export default redis
