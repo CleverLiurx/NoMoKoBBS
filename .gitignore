@@ -102,3 +102,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+# build内静态资源
+/build/*
