@@ -1,13 +1,11 @@
 import koaRouter from 'koa-router'
 import { creatCaptcha, sendSms } from '../../../plugins'
-import { redis } from '../../../db'
+import { redis, imgCodeKey, smsCodeKey } from '../../../db'
+import { user } from '../../../controllers'
 
 const router = koaRouter()
 
 // !!!此路由为不进行权限验证的api: 获取图片验证码 发送短信验证码 注册 登录
-
-const imgCodeKey = phone => `img_code_${phone}` // 图片验证码存储的key
-const smsCodeKey = phone => `sms_code_${phone}` // 短信验证码存储的key
 
 /**
  * 验证码验证流程：
@@ -21,51 +19,52 @@ const smsCodeKey = phone => `sms_code_${phone}` // 短信验证码存储的key
  * 获取图片验证码
  */
 router.get('/captcha', async ctx => {
-  let result
-
-  try {
-    const { phone } = ctx.query
-    const { code, svg } = creatCaptcha()
-    const key = imgCodeKey(phone)
-    redis.set(key, code) // 存储图片验证码
-    redis.expire(key, 60 * 15) // 有效期15分钟
-    ctx.session.userId = 'rt846m12bacs6daw0erg'
-    result = svg
-  } catch (e) {
-    result = 'Error'
-  }
-
-  ctx.body = result
+  const { phone } = ctx.query
+  const { code, svg } = creatCaptcha() // 生成验证码
+  const key = imgCodeKey(phone)
+  redis.set(key, code) // 存储图片验证码
+  redis.expire(key, 60 * 15) // 有效期15分钟
+  ctx.body = svg
 })
 
 /**
  * 发送短信
  */
 router.post('/sms', async ctx => {
+  let result
   const { phone, code } = ctx.request.body
+
+  // 根据phone生成redis中短信验证码和图片验证码的key
   const smsKey = smsCodeKey(phone)
   const imgKey = imgCodeKey(phone)
-  let result
-  
-  try {
-    const imgCode = await redis.get(imgKey) // 图片验证码
-    const smsCode = await redis.get(smsKey) // 短信验证码
-    if (smsCode) {
-      result = '请勿频繁发送'
-    } else if (!imgCode || code != imgCode) {
-      result = '验证码错误'
-    } else {
-      const random6num = Math.random().toString().slice(-5)
-      redis.del(imgKey) // 删除原图片验证码
-      result = await sendSms(phone, random6num) // 发送短信
-      redis.set(smsKey, random6num) // 存储短信验证码
-      redis.expire(smsKey, 60 * 2) // 有效期120s
-    }
-  } catch (e) {
-    result = e
+
+  const imgCode = await redis.get(imgKey) // 获取图片验证码
+  const smsCode = await redis.get(smsKey) // 获取短信验证码
+
+  // smsCode存在即说明120s内发送过
+  if (smsCode) {
+    result = '请勿频繁发送'
+  } else if (!imgCode || code != imgCode) {
+    result = '验证码错误'
+  } else {
+    const random6num = Math.random().toString().slice(-5)
+    redis.del(imgKey) // 删除图片验证码
+    result = await sendSms(phone, random6num) // 发送短信
+    redis.set(smsKey, random6num) // 存储短信验证码：防止频繁调用
+    redis.expire(smsKey, 60 * 2) // 有效期120s
   }
 
   ctx.body = result
 })
+
+/**
+ * 注册
+ */
+router.post('/register', user.register)
+
+/**
+ * 登录
+ */
+router.post('/login', user.login)
 
 export default router

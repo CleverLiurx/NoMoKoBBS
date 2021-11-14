@@ -44,7 +44,7 @@ const send = (phone, code, TemplateId = defaultTempId) => {
       if (!err) {
         resolve('验证码发送成功')
       }
-      reject('验证码发送失败')
+      reject(err)
     })
   })
 }

@@ -9,12 +9,14 @@ import { mongoClient } from './db'
 import intercept from './middlewares/intercept'
 import session from 'koa-session'
 import { sessionConfig, sessionSigned } from './config/session'
+import catchError from './middlewares/catcherror'
 
 const app = new Koa()
 
 app.keys = sessionSigned
 
 app
+  .use(catchError())
   .use(intercept())
   .use(session(sessionConfig, app))
   .use(cors())

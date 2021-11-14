@@ -5,6 +5,6 @@ import { user } from '../../../controllers'
 const router = koaRouter()
 
 router
-  .get('/test', user.test)
+  .get('/logout', user.logout)
 
 export default router
