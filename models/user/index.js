@@ -4,7 +4,8 @@ const schema = new mongoose.Schema({
   // 手机号：登录
   phone: {
     type: String,
-    required: true
+    required: true,
+    index: true
   },
   // 用户名：昵称
   username: {

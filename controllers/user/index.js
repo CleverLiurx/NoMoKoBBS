@@ -2,6 +2,7 @@ import BaseController from '../base-controller'
 import { User } from '../../models'
 import { redis, loginTimeKey, smsCodeKey } from '../../db'
 import { sessionKey } from '../../config/session'
+import { checkTicket, getLoginPack } from '../../plugins'
 
 class Controller extends BaseController {
   constructor() {
@@ -30,6 +31,8 @@ class Controller extends BaseController {
   login = async ctx => {
     let result
     const { phone } = ctx.request.body
+
+    console.log(await checkTicket())
 
     // TODO: 测试接口，现在登录没有校验验证码或密码
     const user = await User.findOne({ phone }).select('_id')

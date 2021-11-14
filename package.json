@@ -23,8 +23,10 @@
     "koa-router": "^10.1.1",
     "koa-session": "^6.2.0",
     "koa-static": "^5.0.0",
+    "md5": "^2.3.0",
     "mongoose": "^6.0.12",
     "mysql": "^2.15.0",
+    "node-rsa": "^1.1.1",
     "pm2": "^2.2.3",
     "svg-captcha": "^1.4.0",
     "tencentcloud-sdk-nodejs": "^4.0.233"
