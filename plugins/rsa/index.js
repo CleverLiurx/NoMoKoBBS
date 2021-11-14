@@ -52,7 +52,7 @@ function _testTicket(ticket) {
 async function _newTicket(phone, ticket) {
   const key = loginTicketKey(phone)
   const flag = await redis.get(key)
-  if (!flag) {
+  if (!flag || flag !== ticket) {
     redis.set(key, ticket) // 未重复，存入redis
     redis.expire(key, ticketTime)
     return true
