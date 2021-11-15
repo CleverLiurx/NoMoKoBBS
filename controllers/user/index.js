@@ -2,7 +2,8 @@ import BaseController from '../base-controller'
 import { User } from '../../models'
 import { redis, loginTimeKey, smsCodeKey } from '../../db'
 import { sessionKey } from '../../config/session'
-import { checkTicket, getLoginPack } from '../../plugins'
+import { checkTicket, getLoginPack, utils, res, err } from '../../plugins'
+import md5 from 'md5'
 
 class Controller extends BaseController {
   constructor() {
@@ -11,48 +12,86 @@ class Controller extends BaseController {
 
   register = async ctx => {
     let result
-    const { phone, code, username } = ctx.request.body
+    const { phone, code, password } = ctx.request.body
+
+    if (!utils.checkPass(password)) {
+      result = err('密码格式错误')
+      return
+    }
 
     // 获取redis中的验证码
     const key = smsCodeKey(phone)
     const smsCode = await redis.get(key)
-    
-    if (code == smsCode) {
-      redis.del(key)
-      await new User({ phone, username }).save()
-      result = '注册成功'
+
+    if (1) {
+      redis.del(key) // 删除验证码120s限制
+      const salt = Math.random().toString(36).slice(-8) // 生成8位密码盐值
+      const hash = md5('liurx' + password + salt) // 生成数据库密码密文
+      await new User({ ...ctx.request.body, password: hash, salt }).save() // 保存
+      result = res()
     } else {
-      resule = '验证码错误'
+      result = err('验证码错误')
     }
 
     ctx.body = result
   }
 
   login = async ctx => {
-    let result
-    const { phone } = ctx.request.body
+    // rsa解析
+    // const { phone, type, code } = await checkTicket(ctx.request.body)
+    // 模拟
+    const { phone, type, code } = ctx.request.body
 
-    console.log(await checkTicket())
-
-    // TODO: 测试接口，现在登录没有校验验证码或密码
-    const user = await User.findOne({ phone }).select('_id')
-    const userId = user._id.toString()
-    const key = loginTimeKey(userId)
-
-    // 判断是否存在登录
-    const loginTime = await redis.get(key)
-    if (loginTime) {
-      result = '注意：该账号已在其他设备登录'
-    } else {
-      result = '登录成功'
+    if (!phone) {
+      ctx.body = err('非法登录')
+      return
     }
 
-    // redis中存储登录时间
-    const time = +new Date()
-    redis.set(key, time)
+    // 查询用户
+    const user = await User.findOne({ phone }).select('password salt')
+    if (!user) {
+      ctx.body = err('用户不存在')
+      return
+    }
 
-    ctx.session.userId = userId
-    ctx.session.loginTime = time
+    const userId = user._id.toString()
+
+    // 验证密码或验证码
+    let login = false
+    if(type) { // 密码登录
+      const hash = md5('liurx' + code + user.salt)
+      if (hash === user.password) {
+        login = true
+      }
+    } else { // 验证码登录
+      const key = smsCodeKey(phone)
+      const smsCode = await redis.get(key)
+      if (code == smsCode) {
+        login = true
+        redis.del(key)
+      }
+    }
+
+    let result
+    if (login) {
+      const key = loginTimeKey(userId)
+      // 判断是否存在登录
+      const loginTime = await redis.get(key)
+      if (loginTime) {
+        result = res({ tip: '该账号在已其他设备登录' })
+      } else {
+        result = res()
+      }
+  
+      // redis中存储登录时间
+      const time = +new Date()
+      redis.set(key, time)
+  
+      ctx.session.userId = userId
+      ctx.session.loginTime = time
+    } else {
+      result = err(`${['验证', '密'][type]}码错误`)
+    }
 
     ctx.body = result
   }
@@ -75,7 +114,7 @@ class Controller extends BaseController {
     ctx.cookies.set(sessionKey, '', cookieOption)
     ctx.cookies.set(`${sessionKey}.sig`, '', cookieOption)
 
-    ctx.body = '安全退出成功'
+    ctx.body = res()
   }
 }
 

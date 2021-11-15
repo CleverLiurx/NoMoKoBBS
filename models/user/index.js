@@ -5,6 +5,7 @@ const schema = new mongoose.Schema({
   phone: {
     type: String,
     required: true,
+    unique: [true, '手机号已经被注册啦'],
     index: true
   },
   // 用户名：昵称
@@ -13,8 +14,18 @@ const schema = new mongoose.Schema({
     unique: true,
     required: [true, '用户名不能为空']
   },
+  // 8位密码盐值
+  salt: {
+    type: String,
+    required: true,
+    minlength: 8,
+    maxlength: 8
+  },
   // 密码
-  password: String,
+  password: {
+    type: String,
+    required: true
+  },
   // 邮箱
   email: String,
   // 生日

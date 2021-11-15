@@ -81,21 +81,22 @@ const getLoginPack = () => ({
   publicKey
 })
 
-const checkTicket = async text => {
+const checkTicket = async body => {
   // mock start
   const pack = getLoginPack() // 获取登录前的ticket和公钥
-  text = _encrypt({ phone: '13131451002', password: '123456', ...pack }) // 客户端加密
+  body = { phone: '13131451002', code: '123456', type: 0, ...pack }
+  text = _encrypt(body) // 客户端加密
   // mock end
 
   let result
-  const { phone, password, ticket } = JSON.parse(_decrypt(text))
+  const { phone, code, type, ticket } = JSON.parse(_decrypt(text))
   const t1 = _testTicket(ticket)
   const t2 = await _newTicket(phone, ticket)
 
   if (t1 && t2) {
-    result = '非法登录'
+    result = {}
   } else {
-    result = { phone, password }
+    result = { phone, code, type }
   }
 
   return result
