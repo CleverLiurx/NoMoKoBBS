@@ -101,10 +101,8 @@ class Controller extends BaseController {
     const sessionId = ctx.cookies.get(sessionKey) || 'no_session_id'
     const { userId } = await redis.hgetall(sessionId)
     const key = loginTimeKey(userId)
-    redis.del(key)
-
-    // 清空session
-    ctx.session = {}
+    redis.del(key) // 清除登录标记
+    redis.del(sessionId) // 清除session
 
     // 清除cookies
     let cookieOption = {
