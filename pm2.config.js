@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       "name": "NoMoKoBBS-backend",
-      "script": "app.js",
+      "script": "dist/app.js",
       "exec_interpreter": "babel-node",
       "exec_mode": "fork_mode",
       "env": {
