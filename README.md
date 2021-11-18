@@ -4,9 +4,13 @@
 ## 启动
 ```cmd
 npm install #安装依赖
+npm run build #打包
 npm run start #本地启动
 npm run dev #测试环境启动
-npm run prod #线上部署 ./build目录下放前端代码
+npm run prod #线上部署
+
+# /build为前端代码
+# /dist为后端打包后的代码
 ```
 
 ## 模块介绍
