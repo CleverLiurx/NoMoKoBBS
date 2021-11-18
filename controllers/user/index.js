@@ -27,7 +27,7 @@ class Controller extends BaseController {
       redis.del(key) // 删除验证码120s限制
       const salt = Math.random().toString(36).slice(-8) // 生成8位密码盐值
       const hash = md5('liurx' + password + salt) // 生成数据库密码密文
-      await new User({ ...ctx.request.body, password: hash, salt }).save() // 保存
+      await new this._model({ ...ctx.request.body, password: hash, salt }).save() // 保存
       result = res()
     } else {
       result = err('验证码错误')
@@ -48,7 +48,7 @@ class Controller extends BaseController {
     }
 
     // 查询用户
-    const user = await User.findOne({ phone }).select('password salt')
+    const user = await this._model.findOne({ phone }).select('password salt')
     if (!user) {
       ctx.body = err('用户不存在')
       return

@@ -3,18 +3,12 @@ import { sessionKey, sessionTime } from '../../config/session'
 
 // 路由为/api/v1/un_auth的接口
 const isUnAuth = ctx => {
-  const url = ctx.request.url
-  let flag = false
-  if (url.indexOf('/api/v1/un_auth') > -1) {
-    flag = true
-  }
-  return flag
+  return ctx.request.url.indexOf('/api/v1/un_auth') > -1
 }
 
 // 接口请求(/api/v1, 非静态资源)
 const isApi = ctx => {
-  const url = ctx.request.url
-  return url.indexOf('/api/v1/') > -1
+  return ctx.request.url.indexOf('/api/v1/') > -1
 }
 
 export default () => {
@@ -42,7 +36,10 @@ export default () => {
       if (time != loginTime) {
         const res = {
           errno: '1007',
-          errmsg: '该账号已在另一客户端登录'
+          errmsg: '该账号已在另一客户端登录',
+          data: {
+            loginTime
+          }
         }
         ctx.body = JSON.stringify(res)
         return false
