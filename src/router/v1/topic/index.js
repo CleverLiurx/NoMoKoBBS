@@ -6,6 +6,6 @@ const router = koaRouter()
 
 router
   .post('/add', topic.add)
-  .get('/', topic.getList)
+  .get('/:id', topic.detail)
 
 export default router

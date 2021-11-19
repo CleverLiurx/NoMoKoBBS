@@ -28,10 +28,7 @@ const schema = new mongoose.Schema({
     default: false
   },
   // 父节点id
-  pid: {
-    type: String,
-    default: '-1'
-  },
+  pid: mongoose.Types.ObjectId,
   // 点赞数
   praiseCount: {
     type: Number,
@@ -52,11 +49,18 @@ const schema = new mongoose.Schema({
     type: Boolean,
     default: false
   }
-}, { timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' } })
+}, { timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' }, toJSON: { virtuals: true } })
+
+schema.virtual('reply', {
+  ref: 'replys',
+  localField: '_id',
+  foreignField: 'pid',
+  justOne: false
+})
 
 schema.post('save', async function(doc) {
   // 一级回复：更新topic的回复数量+1
-  if (doc.pid === '-1') {
+  if (!doc.pid) {
     await Topic.findByIdAndUpdate(this.topicId, { $inc: { replyCount: 1 } })
   }
 })

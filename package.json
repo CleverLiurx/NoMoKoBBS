@@ -26,6 +26,7 @@
     "koa-static": "^5.0.0",
     "md5": "^2.3.0",
     "mongoose": "^6.0.12",
+    "mongoose-autopopulate": "^0.16.0",
     "mysql": "^2.15.0",
     "node-rsa": "^1.1.1",
     "pm2": "^2.2.3",

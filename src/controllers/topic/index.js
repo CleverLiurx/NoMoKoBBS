@@ -22,8 +22,9 @@ class Controller extends BaseController {
     ctx.body = res(result)
   }
 
-  getList = async ctx => {
-    const result = await this._model.find({}).populate('reply')
+  detail = async ctx => {
+    const { id } = ctx.request.params
+    const result = await this._model.findById(id).populate({ path: 'reply', populate: { path: 'reply' } })
     ctx.body = res(result)
   }
 }

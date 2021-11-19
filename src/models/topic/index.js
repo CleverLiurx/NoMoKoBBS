@@ -73,7 +73,16 @@ const schema = new mongoose.Schema({
     type: Boolean,
     default: false
   }
-}, { timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' } })
+}, { timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' }, toJSON: { virtuals: true } })
+
+schema.virtual('reply', {
+  ref: 'replys', // The model to use
+  localField: '_id', // Find people where `localField`
+  foreignField: 'topicId', // is equal to `foreignField`
+  // If `justOne` is true, 'members' will be a single doc as opposed to
+  // an array. `justOne` is false by default.
+  justOne: false
+})
 
 const Model = mongoose.model('topics', schema)
 
