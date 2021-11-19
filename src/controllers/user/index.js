@@ -10,6 +10,8 @@ class Controller extends BaseController {
     super(User)
   }
 
+  pack = ctx => ctx.body = res(getLoginPack())
+
   register = async ctx => {
     let result
     const { phone, code, password } = ctx.request.body
@@ -23,7 +25,7 @@ class Controller extends BaseController {
     const key = smsCodeKey(phone)
     const smsCode = await redis.get(key)
 
-    if (1) {
+    if (smsCode == code) {
       redis.del(key) // 删除验证码120s限制
       const salt = Math.random().toString(36).slice(-8) // 生成8位密码盐值
       const hash = md5('liurx' + password + salt) // 生成数据库密码密文
@@ -56,7 +58,7 @@ class Controller extends BaseController {
 
     const userId = user._id.toString()
 
-    // 验证密码或验证码
+    // 验证 密码或验证码
     let login = false
     if(type) { // 密码登录
       const hash = md5('liurx' + code + user.salt)
@@ -98,8 +100,7 @@ class Controller extends BaseController {
 
   logout = async ctx => {
     // 清除redis
-    const sessionId = ctx.cookies.get(sessionKey) || 'no_session_id'
-    const { userId } = await redis.hgetall(sessionId)
+    const { userId, sessionId } = await utils.parseSess(ctx)
     const key = loginTimeKey(userId)
     redis.del(key) // 清除登录标记
     redis.del(sessionId) // 清除session

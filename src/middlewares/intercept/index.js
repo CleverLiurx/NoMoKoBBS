@@ -1,5 +1,6 @@
 import { redis, loginTimeKey } from '../../db'
 import { sessionKey, sessionTime } from '../../config/session'
+import { utils } from '../../plugins'
 
 // 路由为/api/v1/un_auth的接口
 const isUnAuth = ctx => {
@@ -17,8 +18,7 @@ export default () => {
       await next()
     } else {
       // 获取session中的userId和loginTime
-      const sessionId = ctx.cookies.get(sessionKey) || 'no_session_id'
-      const { userId, loginTime } = await redis.hgetall(sessionId)
+      const { userId, loginTime, sessionId } = await utils.parseSess(ctx)
 
       if (!userId || !loginTime) {
         const res = {

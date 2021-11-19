@@ -1,5 +1,6 @@
 import { redis } from '../../db'
 import { sessionKey } from '../../config/session'
+import { utils } from '../../plugins'
 
 // 判断是否走api接口, 并且非GET请求
 const isNotGetApi = ctx => {
@@ -34,16 +35,16 @@ export default () => {
         if (ctx.request.params) {
           params.params = JSON.stringify(ctx.request.params)
         }
-        if (ctx.query && url) {
+        if (ctx.query) {
           params.query = JSON.stringify(ctx.query)
         }
         content = JSON.stringify(params)
 
-        const sessionId = ctx.cookies.get(sessionKey) || 'no_session_id'
-        const session = await redis.hgetall(sessionId)
+        const { userId } = await utils.parseSess(ctx)
 
         // TODO: 保存
-        // const data = { method, url, userAgent, ip, oDate, content, consuming, status, userId: session.userId }
+        const data = { method, url, userAgent, ip, oDate, content, consuming, status, userId }
+        console.log(data)
       } catch (err) {
         console.log(err)
       }

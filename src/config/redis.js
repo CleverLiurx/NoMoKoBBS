@@ -1,8 +1,8 @@
 const isProduction = process.env.NODE_ENV === 'production'
 
-const password = isProduction ? 'password' : '201213redis'
+const password = isProduction ? 'password' : 'password'
 
-const host = isProduction ? 'localhost' : '81.70.165.28'
+const host = isProduction ? 'localhost' : 'localhost'
 const port = isProduction ? 6379 : 6379
 
 export default {

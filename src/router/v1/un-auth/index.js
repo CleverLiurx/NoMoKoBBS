@@ -50,6 +50,11 @@ router.post('/sms', async ctx => {
 router.post('/register', user.register)
 
 /**
+ * 获取rsa包
+ */
+router.get('/loginPack', user.pack)
+
+/**
  * 登录
  */
 router.post('/login', user.login)
