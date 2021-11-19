@@ -1,8 +1,8 @@
 // Details: https://cloud.tencent.com/document/product/382/43197
 const clientConf = {
   credential: {
-    secretId: 'xxxx',
-    secretKey: 'xxxx'
+    secretId: 'DUYULw76rO0eDFbgTV9cqqc9RUHpDMFsRTNM',
+    secretKey: 'dFB7LNBk48xYtxsgT4xd3AxgRyFG5GGp'
   },
   region: 'ap-guangzhou',
   profile: {
