@@ -18,7 +18,12 @@ class Controller extends BaseController {
     }
 
     const { userId: createBy } = await utils.parseSess(ctx)
-    const result = await new this._model({ classId, createBy, title, content, topicImage, anon })
+    const result = await new this._model({ classId, createBy, title, content, topicImage, anon }).save()
+    ctx.body = res(result)
+  }
+
+  getList = async ctx => {
+    const result = await this._model.find({}).populate('reply')
     ctx.body = res(result)
   }
 }

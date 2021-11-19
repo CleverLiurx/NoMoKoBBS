@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import Topic from '../topic'
 
 const schema = new mongoose.Schema({
   // 回复人
@@ -7,7 +8,7 @@ const schema = new mongoose.Schema({
     ref: 'users'
   },
   // 回复的帖子
-  topic: {
+  topicId: {
     type: mongoose.Types.ObjectId,
     ref: 'topics'
   },
@@ -29,7 +30,7 @@ const schema = new mongoose.Schema({
   // 父节点id
   pid: {
     type: String,
-    default: ''
+    default: '-1'
   },
   // 点赞数
   praiseCount: {
@@ -52,6 +53,13 @@ const schema = new mongoose.Schema({
     default: false
   }
 }, { timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' } })
+
+schema.post('save', async function(doc) {
+  // 一级回复：更新topic的回复数量+1
+  if (doc.pid === '-1') {
+    await Topic.findByIdAndUpdate(this.topicId, { $inc: { replyCount: 1 } })
+  }
+})
 
 const Model = mongoose.model('replys', schema)
 
