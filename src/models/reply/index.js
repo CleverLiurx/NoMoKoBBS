@@ -58,10 +58,13 @@ schema.virtual('reply', {
   justOne: false
 })
 
-schema.post('save', async function(doc) {
-  // 一级回复：更新topic的回复数量+1
-  if (!doc.pid) {
+schema.post('save', async function() {
+  // 一级回复：topic的回复数量+1
+  if (!this.pid) {
     await Topic.findByIdAndUpdate(this.topicId, { $inc: { replyCount: 1 } })
+  } else {
+    // 二级回复：一级reply的回复数量+1
+    await Model.findByIdAndUpdate(this.pid, { $inc: { replyCount: 1 } })
   }
 })
 
