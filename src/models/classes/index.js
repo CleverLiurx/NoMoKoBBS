@@ -19,11 +19,10 @@ const schema = new mongoose.Schema({
   },
   // 允许匿名
   canAnon: {
-    type: Number,
-    enum: [0, 1],
-    default: 0
+    type: Boolean,
+    default: false
   },
-  // 板块秒睡
+  // 板块描述
   description: String,
   // 板块图标
   icon: String

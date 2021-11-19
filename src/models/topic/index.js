@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 const schema = new mongoose.Schema({
   // 所属板块
-  class: {
+  classId: {
     type: mongoose.Types.ObjectId,
     ref: 'class'
   },

@@ -44,7 +44,6 @@ export default () => {
 
         // TODO: 保存
         const data = { method, url, userAgent, ip, oDate, content, consuming, status, userId }
-        console.log(data)
       } catch (err) {
         console.log(err)
       }

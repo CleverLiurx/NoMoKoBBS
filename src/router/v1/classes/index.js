@@ -1,10 +1,10 @@
 import koaRouter from 'koa-router'
 
-import { topic } from '../../../controllers'
+import { classes } from '../../../controllers'
 
 const router = koaRouter()
 
 router
-  .post('/add', topic.add)
+  .post('/add', classes.add)
 
 export default router

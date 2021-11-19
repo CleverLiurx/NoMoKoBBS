@@ -1,3 +1,5 @@
 import user from './user'
+import topic from './topic'
+import classes from './classes'
 
-export { user }
+export { user, topic, classes }
