@@ -51,6 +51,10 @@ const schema = new mongoose.Schema({
   }
 }, { timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' }, toJSON: { virtuals: true } })
 
+schema.pre('find', function() {
+  this.find({ delFlag: false }).populate('createBy', '_id username sex')
+})
+
 schema.virtual('reply', {
   ref: 'replys',
   localField: '_id',
@@ -65,6 +69,14 @@ schema.post('save', async function() {
   } else {
     // 二级回复：一级reply的回复数量+1
     await Model.findByIdAndUpdate(this.pid, { $inc: { replyCount: 1 } })
+  }
+})
+
+schema.post('find', function(docs) {
+  for (let doc of docs) {
+    if (doc.status) {
+      doc.content = doc.content.slice(0, 2) + '**********'
+    }
   }
 })
 

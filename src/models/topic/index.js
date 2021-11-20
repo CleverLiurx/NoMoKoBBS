@@ -9,7 +9,7 @@ const schema = new mongoose.Schema({
   // 创建人
   createBy: {
     type: mongoose.Types.ObjectId,
-    ref: 'user'
+    ref: 'users'
   },
   // 标题
   title: String,
@@ -19,7 +19,12 @@ const schema = new mongoose.Schema({
     required: [true, '内容不能为空']
   },
   // 图片
-  topicImage: Array,
+  topicImage: [
+    {
+      name: String,
+      url: String
+    }
+  ],
   // 点击数
   hitsCount: {
     type: Number,
@@ -33,7 +38,7 @@ const schema = new mongoose.Schema({
   // 最后回复人
   repliedBy: {
     type: mongoose.Types.ObjectId,
-    ref: 'user'
+    ref: 'users'
   },
   // 最后回复时间
   repliedTime: Date,
@@ -44,9 +49,8 @@ const schema = new mongoose.Schema({
   },
   // 删除状态 1-删除
   delFlag: {
-    type: Number,
-    enum: [0, 1],
-    default: 0
+    type: Boolean,
+    default: false
   },
   // 热门回复
   hotReply: {
@@ -75,13 +79,24 @@ const schema = new mongoose.Schema({
   }
 }, { timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' }, toJSON: { virtuals: true } })
 
+schema.pre('findOne', function() {
+  this.findOne({ delFlag: false }).populate('createBy', '_id username sex')
+})
+schema.pre('find', function() {
+  this.find({ delFlag: false }).populate('createBy', '_id username sex')
+})
+
 schema.virtual('reply', {
-  ref: 'replys', // The model to use
-  localField: '_id', // Find people where `localField`
-  foreignField: 'topicId', // is equal to `foreignField`
-  // If `justOne` is true, 'members' will be a single doc as opposed to
-  // an array. `justOne` is false by default.
+  ref: 'replys',
+  localField: '_id',
+  foreignField: 'topicId',
   justOne: false
+})
+
+schema.post('findOne', function (doc) {
+  if (doc && !doc.status) {
+    doc.content = doc.content.slice(0, 2) + '**********'
+  }
 })
 
 const Model = mongoose.model('topics', schema)

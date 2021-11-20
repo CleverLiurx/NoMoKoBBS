@@ -27,6 +27,13 @@ class Controller extends BaseController {
     const result = await this._model.findById(id).populate({ path: 'reply', populate: { path: 'reply' } })
     ctx.body = res(result)
   }
+
+  getList = async ctx => {
+    const { classId, createBy, sort, page = 1, limit = 20} = ctx.request.params
+    // sort: repliedTime hitsCount replyCount praiseCount starCount
+    const result = await this._model.find({}).skip((page - 1) * parseInt(limit)).limit(parseInt(limit))
+    ctx.body = res(result)
+  }
 }
 
 export default new Controller
