@@ -1,5 +1,5 @@
 import BaseController from '../base-controller'
-import { User } from '../../models'
+import { User, Record } from '../../models'
 import { redis, loginTimeKey, smsCodeKey } from '../../db'
 import { sessionKey } from '../../config/session'
 import { checkTicket, getLoginPack, utils, res, err } from '../../plugins'
@@ -29,7 +29,8 @@ class Controller extends BaseController {
       redis.del(key) // 删除验证码120s限制
       const salt = Math.random().toString(36).slice(-8) // 生成8位密码盐值
       const hash = md5('liurx' + password + salt) // 生成数据库密码密文
-      await new this._model({ ...ctx.request.body, password: hash, salt }).save() // 保存
+      const newUser = await new this._model({ ...ctx.request.body, password: hash, salt }).save() // 保存
+      await new Record({ createBy: newUser._id }).save()
       result = res()
     } else {
       result = err('验证码错误')

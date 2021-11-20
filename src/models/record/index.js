@@ -4,15 +4,11 @@ const schema = new mongoose.Schema({
   // 用户
   createBy: {
     type: mongoose.Types.ObjectId,
-    ref: 'users'
+    ref: 'users',
+    unique: true
   },
   // 发帖数
   topicCount: {
-    type: Number,
-    default: 0
-  },
-  // 浏览数
-  clickTopicCount: {
     type: Number,
     default: 0
   },
@@ -21,23 +17,23 @@ const schema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  // 点赞数
-  praiseCount: {
-    type: Number,
-    default: 0
-  },
-  // 收藏数
-  starCount: {
-    type: Number,
-    default: 0
-  },
   // 被评论数
   beCommentCount: {
     type: Number,
     default: 0
   },
+  // 点赞数
+  praiseCount: {
+    type: Number,
+    default: 0
+  },
   // 被点赞数
   bePraiseCount: {
+    type: Number,
+    default: 0
+  },
+  // 收藏数
+  starCount: {
     type: Number,
     default: 0
   },

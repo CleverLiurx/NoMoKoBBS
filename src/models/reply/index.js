@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import Topic from '../topic'
+import Record from '../record'
 
 const schema = new mongoose.Schema({
   // 回复人
@@ -63,12 +64,14 @@ schema.virtual('reply', {
 })
 
 schema.post('save', async function() {
-  // 一级回复：topic的回复数量+1
+  // 一级回复
   if (!this.pid) {
-    await Topic.findByIdAndUpdate(this.topicId, { $inc: { replyCount: 1 } })
+    const topic = await Topic.findByIdAndUpdate(this.topicId, { $inc: { replyCount: 1 } }) // 文章的回帖数+1
+    await Record.findOneAndUpdate({ createBy: topic.createBy }, { $inc: { commentCount: 1 } }) // 被评论数+1
+    await Record.findOneAndUpdate({ createBy: this.createBy }, { $inc: { beCommentCount: 1 } }) // 评论数+1
   } else {
-    // 二级回复：一级reply的回复数量+1
-    await Model.findByIdAndUpdate(this.pid, { $inc: { replyCount: 1 } })
+    // 二级回复
+    await Model.findByIdAndUpdate(this.pid, { $inc: { replyCount: 1 } }) // 一级reply的回复数量+1
   }
 })
 

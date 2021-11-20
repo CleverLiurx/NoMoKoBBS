@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import Record from '../record'
 
 const schema = new mongoose.Schema({
   // 所属板块
@@ -30,6 +31,16 @@ const schema = new mongoose.Schema({
     type: Number,
     default: 0
   },
+  // 点赞数
+  praiseCount: {
+    type: Number,
+    default: 0
+  },
+  // 收藏数
+  starCount: {
+    type: Number,
+    default: 0
+  },
   // 回复数
   replyCount: {
     type: Number,
@@ -56,16 +67,6 @@ const schema = new mongoose.Schema({
   hotReply: {
     type: mongoose.Types.ObjectId,
     ref: 'replys'
-  },
-  // 点赞数
-  praiseCount: {
-    type: Number,
-    default: 0
-  },
-  // 收藏数
-  starCount: {
-    type: Number,
-    default: 0
   },
   // 举报数
   informCount: {
@@ -97,6 +98,10 @@ schema.post('findOne', function (doc) {
   if (doc && !doc.status) {
     doc.content = doc.content.slice(0, 2) + '**********'
   }
+})
+
+schema.post('save', async function () {
+  await Record.findOneAndUpdate({ createBy: this.createBy }, { $inc: { topicCount: 1 } })
 })
 
 const Model = mongoose.model('topics', schema)
