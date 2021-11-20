@@ -29,9 +29,20 @@ class Controller extends BaseController {
   }
 
   getList = async ctx => {
-    const { classId, createBy, sort, page = 1, limit = 20} = ctx.request.params
+    const { classId, createBy, sort = 'createTime', page = 1, limit = 20} = ctx.query
     // sort: repliedTime hitsCount replyCount praiseCount starCount
-    const result = await this._model.find({}).skip((page - 1) * parseInt(limit)).limit(parseInt(limit))
+    let filter = {}
+    if (classId) {
+      filter.classId = classId
+    }
+    if (createBy) {
+      filter.createBy = createBy
+    }
+    const result = await this._model
+      .find(filter)
+      .sort({ [sort]: -1 })
+      .skip((page - 1) * parseInt(limit))
+      .limit(parseInt(limit))
     ctx.body = res(result)
   }
 }
