@@ -106,7 +106,7 @@ schema.post('findOne', async function (doc) {
     }
   
     // 看自己是否收藏
-    const starRecord = await Star.findOne({ createBy: doc.createBy._id, topicId: doc._id, status: 1 })
+    const starRecord = await Star.findOne({ createBy: doc.createBy._id, topicId: doc._id, status: true })
     if (starRecord) {
       doc.hadStar = true
     } else {
@@ -126,7 +126,7 @@ schema.post('findOne', async function (doc) {
 schema.post('find', async function (docs) {
   for (let doc of docs) {
     // 看自己是否收藏
-    const starRecord = await Star.findOne({ createBy: doc.createBy._id, topicId: doc._id, status: 1 })
+    const starRecord = await Star.findOne({ createBy: doc.createBy._id, topicId: doc._id, status: true })
     if (starRecord) {
       doc.hadStar = true
     } else {

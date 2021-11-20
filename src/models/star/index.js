@@ -12,7 +12,10 @@ const schema = new mongoose.Schema({
     ref: 'topics'
   },
   // 收藏状态：1-收藏 0-取消收藏
-  status: Number
+  status: {
+    type: Boolean,
+    default: true
+  }
 }, { timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' } })
 
 const Model = mongoose.model('stars', schema)
