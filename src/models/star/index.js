@@ -11,7 +11,7 @@ const schema = new mongoose.Schema({
     type: mongoose.Types.ObjectId,
     ref: 'topics'
   },
-  // 收藏状态：true-收藏 false-取消收藏
+  // 收藏状态：1-收藏 0-取消收藏
   status: Number
 }, { timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' } })
 

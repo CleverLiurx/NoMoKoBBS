@@ -1,5 +1,7 @@
 import mongoose from 'mongoose'
 import Record from '../record'
+import Star from '../star'
+import Parise from '../parise'
 
 const schema = new mongoose.Schema({
   // 所属板块
@@ -77,7 +79,9 @@ const schema = new mongoose.Schema({
   anon: {
     type: Boolean,
     default: false
-  }
+  },
+  hadStar: Boolean,
+  hadParise: Boolean
 }, { timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' }, toJSON: { virtuals: true } })
 
 schema.pre('findOne', function() {
@@ -94,9 +98,48 @@ schema.virtual('reply', {
   justOne: false
 })
 
-schema.post('findOne', function (doc) {
-  if (doc && !doc.status) {
-    doc.content = doc.content.slice(0, 2) + '**********'
+schema.post('findOne', async function (doc) {
+  if (doc) {
+    // 如果被屏蔽
+    if (!doc.status) {
+      doc.content = doc.content.slice(0, 2) + '**********'
+    }
+  
+    // 看自己是否收藏
+    const starRecord = await Star.findOne({ createBy: doc.createBy._id, topicId: doc._id, status: 1 })
+    if (starRecord) {
+      doc.hadStar = true
+    } else {
+      doc.hadStar = false
+    }
+  
+    // 看自己是否点赞
+    const pariseRecord = await Parise.findOne({ createBy: doc.createBy._id, topicId: doc._id, status: true })
+    if (pariseRecord) {
+      doc.hadParise = true
+    } else {
+      doc.hadParise = false
+    }
+  }
+})
+
+schema.post('find', async function (docs) {
+  for (let doc of docs) {
+    // 看自己是否收藏
+    const starRecord = await Star.findOne({ createBy: doc.createBy._id, topicId: doc._id, status: 1 })
+    if (starRecord) {
+      doc.hadStar = true
+    } else {
+      doc.hadStar = false
+    }
+  
+    // 看自己是否点赞
+    const pariseRecord = await Parise.findOne({ createBy: doc.createBy._id, topicId: doc._id, status: true })
+    if (pariseRecord) {
+      doc.hadParise = true
+    } else {
+      doc.hadParise = false
+    }
   }
 })
 

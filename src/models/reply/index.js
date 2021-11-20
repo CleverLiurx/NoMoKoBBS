@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
 import Topic from '../topic'
 import Record from '../record'
+import Parise from '../parise'
 
 const schema = new mongoose.Schema({
   // 回复人
@@ -49,7 +50,8 @@ const schema = new mongoose.Schema({
   delFlag: {
     type: Boolean,
     default: false
-  }
+  },
+  hadParise: Boolean
 }, { timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' }, toJSON: { virtuals: true } })
 
 schema.pre('find', function() {
@@ -75,10 +77,18 @@ schema.post('save', async function() {
   }
 })
 
-schema.post('find', function(docs) {
+schema.post('find', async function(docs) {
   for (let doc of docs) {
     if (doc.status) {
       doc.content = doc.content.slice(0, 2) + '**********'
+    }
+
+    // 看自己是否点赞
+    const pariseRecord = await Parise.findOne({ createBy: doc.createBy, replyId: doc._id, status: true })
+    if (pariseRecord) {
+      doc.hadParise = true
+    } else {
+      doc.hadParise = false
     }
   }
 })
