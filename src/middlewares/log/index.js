@@ -1,6 +1,5 @@
-import { redis } from '../../db'
-import { sessionKey } from '../../config/session'
 import { utils } from '../../plugins'
+import saveLog from '../../models/log'
 
 // 判断是否走api接口, 并且非GET请求
 const isNotGetApi = ctx => {
@@ -42,8 +41,9 @@ export default () => {
 
         const { userId } = await utils.parseSess(ctx)
 
-        // TODO: 保存
+        //  保存
         const data = { method, url, userAgent, ip, oDate, content, consuming, status, userId }
+        saveLog(data)
       } catch (err) {
         console.log(err)
       }
