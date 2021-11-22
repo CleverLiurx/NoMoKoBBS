@@ -102,7 +102,8 @@ schema.post('findOne', async function (doc) {
   if (doc) {
     // 如果被屏蔽
     if (!doc.status) {
-      doc.content = doc.content.slice(0, 2) + '**********'
+      doc.content = '**** 涉嫌违规 **** 已被屏蔽 ****'
+      // doc.content = doc.content.slice(0, 2) + '**********'
     }
   
     // 看自己是否收藏

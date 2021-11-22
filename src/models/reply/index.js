@@ -79,8 +79,9 @@ schema.post('save', async function() {
 
 schema.post('find', async function(docs) {
   for (let doc of docs) {
-    if (doc.status) {
-      doc.content = doc.content.slice(0, 2) + '**********'
+    if (!doc.status) {
+      // doc.content = doc.content.slice(0, 2) + '**********'
+      doc.content = '**** 涉嫌违规 **** 已被屏蔽 ****'
     }
 
     // 看自己是否点赞
