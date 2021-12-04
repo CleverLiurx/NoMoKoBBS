@@ -20,6 +20,11 @@ class Controller extends BaseController {
     const result = await new this._model({ classname, master, canAnon, description, icon }).save()
     ctx.body = res(result)
   }
+
+  getList = async ctx => {
+    const result = await this._model.find({})
+    ctx.body = res(result)
+  }
 }
 
 export default new Controller

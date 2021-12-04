@@ -5,6 +5,7 @@ import { classes } from '../../../controllers'
 const router = koaRouter()
 
 router
-  .post('/add', classes.add)
+  .post('/', classes.add)
+  .get('/', classes.getList)
 
 export default router
