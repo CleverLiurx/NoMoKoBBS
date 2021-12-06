@@ -5,6 +5,15 @@ import { sessionKey } from '../../config/session'
 import { checkTicket, getLoginPack, utils, res, err } from '../../plugins'
 import md5 from 'md5'
 
+const cleanUser = (data, config) => {
+  const user = { ...data.toJSON(), ...config }
+  delete user.password
+  delete user.salt
+  delete user.salt
+  delete user.__v
+  return user
+}
+
 class Controller extends BaseController {
   constructor() {
     super(User)
@@ -31,7 +40,7 @@ class Controller extends BaseController {
       const hash = md5('liurx' + password + salt) // 生成数据库密码密文
       const newUser = await new this._model({ ...ctx.request.body, password: hash, salt }).save() // 保存
       await new Record({ createBy: newUser._id }).save()
-      result = res()
+      result = res(cleanUser(newUser))
     } else {
       result = err('验证码错误')
     }
@@ -43,7 +52,7 @@ class Controller extends BaseController {
     // rsa解析
     // const { phone, type, code } = await checkTicket(ctx.request.body)
     // 模拟
-    const { phone, type, code } = ctx.request.body
+    const { phone, type = 1, code } = ctx.request.body
 
     if (!phone) {
       ctx.body = err('非法登录')
@@ -51,7 +60,7 @@ class Controller extends BaseController {
     }
 
     // 查询用户
-    const user = await this._model.findOne({ phone }).select('password salt')
+    let user = await this._model.findOne({ phone })
     if (!user) {
       ctx.body = err('用户不存在')
       return
@@ -75,15 +84,15 @@ class Controller extends BaseController {
       }
     }
 
-    let result
+    let result    
     if (login) {
       const key = loginTimeKey(userId)
       // 判断是否存在登录
       const loginTime = await redis.get(key)
       if (loginTime) {
-        result = res({ tip: '该账号在已其他设备登录' })
+        result = res(cleanUser(user, { tip: '该账号在已其他设备登录' }))
       } else {
-        result = res()
+        result = res(cleanUser(user))
       }
   
       // redis中存储登录时间
