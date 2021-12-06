@@ -125,6 +125,17 @@ class Controller extends BaseController {
 
     ctx.body = res()
   }
+
+  getUserInfo = async ctx => {
+    let { _id } = ctx.query
+    if (!_id) {
+      const { userId } = await utils.parseSess(ctx)
+      _id = userId
+    }
+
+    const user = await this._model.findById(_id).select('-password -salt')
+    ctx.body = res(user)
+  }
 }
 
 export default new Controller
