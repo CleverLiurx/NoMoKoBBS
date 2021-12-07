@@ -61,15 +61,15 @@ async function _newTicket(phone, ticket) {
   }
 }
 
-// 公钥加密
-function _encrypt(data) {
-  const nodersa = new NodeRSA(publicKey)
+// 公钥加密: 服务端用不到 加密在客户端进行
+function _encrypt(data, k) {
+  const nodersa = new NodeRSA(k)
   const encrypted = nodersa.encrypt(data, 'base64')
   return encrypted
 }
 
 
-// 私钥解密: 服务端用不到 加密在客户端进行
+// 私钥解密
 function _decrypt(data) {
   const nodersa = new NodeRSA(privateKey)
   const decrypted = nodersa.decrypt(data, 'utf8')
@@ -82,21 +82,15 @@ const getLoginPack = () => ({
 })
 
 const checkTicket = async body => {
-  // mock start
-  const pack = getLoginPack() // 获取登录前的ticket和公钥
-  body = { phone: '13131451002', code: '123456', type: 0, ...pack }
-  text = _encrypt(body) // 客户端加密
-  // mock end
-
   let result
-  const { phone, code, type, ticket } = JSON.parse(_decrypt(text))
+  const { phone, password, ticket } = JSON.parse(_decrypt(body))
   const t1 = _testTicket(ticket)
   const t2 = await _newTicket(phone, ticket)
 
   if (t1 && t2) {
-    result = {}
+    result = { phone, password }
   } else {
-    result = { phone, code, type }
+    result = {}
   }
 
   return result

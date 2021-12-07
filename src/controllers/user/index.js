@@ -9,7 +9,6 @@ const cleanUser = (data, config) => {
   const user = { ...data.toJSON(), ...config }
   delete user.password
   delete user.salt
-  delete user.salt
   delete user.__v
   return user
 }
@@ -26,7 +25,7 @@ class Controller extends BaseController {
     const { phone, code, password } = ctx.request.body
 
     if (!utils.checkPass(password)) {
-      result = err('密码格式错误')
+      result = err('请输入符合要求的密码')
       return
     }
 
@@ -50,9 +49,9 @@ class Controller extends BaseController {
 
   login = async ctx => {
     // rsa解析
-    // const { phone, type, code } = await checkTicket(ctx.request.body)
+    const { phone, password } = await checkTicket(ctx.request.body.text)
     // 模拟
-    const { phone, type = 1, code } = ctx.request.body
+    // const { phone, password } = ctx.request.body
 
     if (!phone) {
       ctx.body = err('非法登录')
@@ -68,20 +67,11 @@ class Controller extends BaseController {
 
     const userId = user._id.toString()
 
-    // 验证 密码或验证码
+    // 验证密码
     let login = false
-    if(type) { // 密码登录
-      const hash = md5('liurx' + code + user.salt)
-      if (hash === user.password) {
-        login = true
-      }
-    } else { // 验证码登录
-      const key = smsCodeKey(phone)
-      const smsCode = await redis.get(key)
-      if (code == smsCode) {
-        login = true
-        redis.del(key)
-      }
+    const hash = md5('liurx' + password + user.salt)
+    if (hash === user.password) {
+      login = true
     }
 
     let result    
@@ -102,7 +92,7 @@ class Controller extends BaseController {
       ctx.session.userId = userId
       ctx.session.loginTime = time
     } else {
-      result = err(`${['验证', '密'][type]}码错误`)
+      result = err('密码错误')
     }
 
     ctx.body = result

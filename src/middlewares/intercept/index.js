@@ -25,6 +25,7 @@ export default () => {
           errno: '1006',
           errmsg: '未登录'
         }
+        ctx.status = 401
         ctx.body = JSON.stringify(res)
         return false
       }

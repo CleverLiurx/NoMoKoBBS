@@ -21,7 +21,7 @@ app
   .use(catchError())
   .use(intercept())
   .use(session(sessionConfig, app))
-  .use(cors())
+  .use(cors({ credentials: true }))
   .use(compress({ threshold: 2048 }))
   .use(servStatic('./build'))
   .use(bodyParser())
