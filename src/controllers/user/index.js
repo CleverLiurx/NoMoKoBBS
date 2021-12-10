@@ -25,7 +25,7 @@ class Controller extends BaseController {
     const { phone, code, password } = ctx.request.body
 
     if (!utils.checkPass(password)) {
-      result = err('请输入符合要求的密码')
+      ctx.body = err('请输入符合要求的密码')
       return
     }
 
@@ -39,10 +39,20 @@ class Controller extends BaseController {
       const hash = md5('liurx' + password + salt) // 生成数据库密码密文
       const newUser = await new this._model({ ...ctx.request.body, password: hash, salt }).save() // 保存
       await new Record({ createBy: newUser._id }).save()
+
+      const timeKey = loginTimeKey(newUser._id.toString())
+      // redis中存储登录时间
+      const time = +new Date()
+      redis.set(timeKey, time)
+  
+      ctx.session.userId = newUser._id.toString()
+      ctx.session.loginTime = time
+
       result = res(cleanUser(newUser))
     } else {
       result = err('验证码错误')
     }
+  
 
     ctx.body = result
   }
