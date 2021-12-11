@@ -8,17 +8,17 @@ class Controller extends BaseController {
   }
 
   add = async ctx => {
-    const { classId, title, content, topicImage, anon } = ctx.request.body
+    const { classFrom, title, content, topicImage, anon } = ctx.request.body
 
     // 校验板块存在
-    const classRecord = await Classes.findById(classId)
+    const classRecord = await Classes.findById(classFrom)
     if (!classRecord) {
       ctx.body = err('板块不存在')
       return
     }
 
     const { userId: createBy } = await utils.parseSess(ctx)
-    const result = await new this._model({ classId, createBy, title, content, topicImage, anon }).save()
+    const result = await new this._model({ classFrom, createBy, title, content, topicImage, anon }).save()
     ctx.body = res(result)
   }
 
@@ -29,11 +29,11 @@ class Controller extends BaseController {
   }
 
   getList = async ctx => {
-    const { classId, createBy, sort = 'createTime', page = 1, limit = 20} = ctx.query
+    const { classFrom, createBy, sort = 'createTime', page = 1, limit = 20} = ctx.query
     // sort: repliedTime hitsCount replyCount praiseCount starCount
     let filter = {}
-    if (classId) {
-      filter.classId = classId
+    if (classFrom) {
+      filter.classFrom = classFrom
     }
     if (createBy) {
       filter.createBy = createBy

@@ -5,7 +5,7 @@ import Parise from '../parise'
 
 const schema = new mongoose.Schema({
   // 所属板块
-  classId: {
+  classFrom: {
     type: mongoose.Types.ObjectId,
     ref: 'class'
   },
@@ -85,10 +85,10 @@ const schema = new mongoose.Schema({
 }, { timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' }, toJSON: { virtuals: true } })
 
 schema.pre('findOne', function() {
-  this.findOne({ delFlag: false }).populate('createBy', '_id username sex')
+  this.findOne({ delFlag: false }).populate('createBy', '_id username sex').populate('classFrom', '_id classname')
 })
 schema.pre('find', function() {
-  this.find({ delFlag: false }).populate('createBy', '_id username sex')
+  this.find({ delFlag: false }).populate('createBy', '_id username sex').populate('classFrom', '_id classname')
 })
 
 schema.virtual('reply', {
