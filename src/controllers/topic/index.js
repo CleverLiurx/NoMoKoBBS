@@ -29,7 +29,7 @@ class Controller extends BaseController {
   }
 
   getList = async ctx => {
-    const { classFrom, createBy, sort = 'createTime', page = 1, limit = 20} = ctx.query
+    const { classFrom, createBy, sort = 'createTime', page = 1, limit = 10} = ctx.query
     // sort: repliedTime hitsCount replyCount praiseCount starCount
     let filter = {}
     if (classFrom) {

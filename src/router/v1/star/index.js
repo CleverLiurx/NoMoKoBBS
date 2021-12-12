@@ -5,6 +5,6 @@ import { star } from '../../../controllers'
 const router = koaRouter()
 
 router
-  .put('/', star.update)
+  .patch('/', star.update)
 
 export default router

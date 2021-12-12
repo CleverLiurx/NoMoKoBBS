@@ -27,11 +27,11 @@ class Controller extends BaseController {
     }
 
     let inc = !starRecord || !starRecord.status ? 1 : -1
-    const topic = await Topic.findByIdAndUpdate(topicId, { $inc: { starCount: inc } }) // 帖子的收藏数+-1
+    const topic = await Topic.findByIdAndUpdate(topicId, { $inc: { starCount: inc } }, { new: true }).populate('createBy', '_id username sex avator').populate('classFrom', '_id classname') // 帖子的收藏数+-1
     await Record.findOneAndUpdate({ createBy }, { $inc: { starCount: inc } }) // 用户的收藏数+-1
     await Record.findOneAndUpdate({ createBy: topic.createBy }, { $inc: { beStarCount: inc } }) // 用户的被收藏数+-1
 
-    ctx.body = res()
+    ctx.body = res(topic)
   }
 }
 

@@ -85,10 +85,10 @@ const schema = new mongoose.Schema({
 }, { timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' }, toJSON: { virtuals: true } })
 
 schema.pre('findOne', function() {
-  this.findOne({ delFlag: false }).populate('createBy', '_id username sex').populate('classFrom', '_id classname')
+  this.findOne({ delFlag: false }).populate('createBy', '_id username sex avator').populate('classFrom', '_id classname')
 })
 schema.pre('find', function() {
-  this.find({ delFlag: false }).populate('createBy', '_id username sex').populate('classFrom', '_id classname')
+  this.find({ delFlag: false }).populate('createBy', '_id username sex avator').populate('classFrom', '_id classname')
 })
 
 schema.virtual('reply', {
@@ -99,6 +99,31 @@ schema.virtual('reply', {
 })
 
 schema.post('findOne', async function (doc) {
+  if (doc) {
+    // 如果被屏蔽
+    if (!doc.status) {
+      doc.content = '**** 涉嫌违规 **** 已被屏蔽 ****'
+      // doc.content = doc.content.slice(0, 2) + '**********'
+    }
+  
+    // 看自己是否收藏
+    const starRecord = await Star.findOne({ createBy: doc.createBy._id, topicId: doc._id, status: true })
+    if (starRecord) {
+      doc.hadStar = true
+    } else {
+      doc.hadStar = false
+    }
+  
+    // 看自己是否点赞
+    const pariseRecord = await Parise.findOne({ createBy: doc.createBy._id, topicId: doc._id, status: true })
+    if (pariseRecord) {
+      doc.hadParise = true
+    } else {
+      doc.hadParise = false
+    }
+  }
+})
+schema.post('findOneAndUpdate', async function (doc) {
   if (doc) {
     // 如果被屏蔽
     if (!doc.status) {
