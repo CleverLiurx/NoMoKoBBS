@@ -133,7 +133,7 @@ class Controller extends BaseController {
       _id = userId
     }
 
-    const user = await this._model.findById(_id).select('-password -salt')
+    const user = await this._model.findById(_id).populate('record').select('-password -salt')
     ctx.body = res(user)
   }
 }

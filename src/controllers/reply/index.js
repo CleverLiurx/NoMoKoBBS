@@ -23,7 +23,7 @@ class Controller extends BaseController {
     // pid不存在：说明是一级回复
     if (!pid) {
       await Topic.findByIdAndUpdate(topicId, { repliedBy: createBy, repliedTime: new Date() })
-      result = await new this._model({ topicId, content, createBy }).save()
+      result = await new this._model({ topicId, content, createBy, hasChild: true }).save()
     } else {
       // 二级回复：查找是否存在一级回复
       const replyRecord = await this._model.findById(pid)

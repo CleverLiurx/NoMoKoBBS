@@ -44,7 +44,7 @@ const schema = new mongoose.Schema({
   // 用户记录
   record: {
     type: mongoose.Types.ObjectId,
-    ref: 'replys'
+    ref: 'records'
   },
   // 关联学校的学号
   studentId: {
