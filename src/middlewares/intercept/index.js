@@ -4,13 +4,14 @@ import { utils } from '../../plugins'
 
 // 路由为/api/v1/un_auth的接口
 const isUnAuth = ctx => {
-  return ctx.request.url.indexOf('/api/v1/un_auth') > -1
+  return ctx.request.url.indexOf('/api/v1/un_auth') > -1 || ctx.request.method == 'GET'
 }
 
 // 接口请求(/api/v1, 非静态资源)
 const isApi = ctx => {
   return ctx.request.url.indexOf('/api/v1/') > -1
 }
+
 
 export default () => {
   return async (ctx, next) => {
