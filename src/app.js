@@ -1,6 +1,7 @@
 import Koa from 'koa'
 import compress from 'koa-compress'
 import bodyParser from 'koa-bodyparser'
+import koaBody from 'koa-body'
 import cors from '@koa/cors'
 import servStatic from 'koa-static'
 import config from './config'
@@ -25,6 +26,10 @@ app
   .use(compress({ threshold: 2048 }))
   .use(servStatic('./build'))
   .use(bodyParser())
+  .use(koaBody({
+    multipart: true,
+    formidable: { maxFileSize: 200*1024*1024 } 
+  }))
   .use(router.routes())
 
 mongoClient()

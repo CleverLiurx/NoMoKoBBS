@@ -7,6 +7,7 @@ import classes from './classes'
 import reply from './reply'
 import star from './star'
 import parise from './parise'
+import file from './file'
 
 const router = koaRouter()
 
@@ -18,5 +19,6 @@ router
   .use('/reply', reply.routes())
   .use('/star', star.routes())
   .use('/parise', parise.routes())
+  .use('/file', file.routes())
 
 export default router
