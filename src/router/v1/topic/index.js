@@ -5,7 +5,7 @@ import { topic } from '../../../controllers'
 const router = koaRouter()
 
 router
-  .post('/add', topic.add)
+  .post('/', topic.add)
   .get('/:id', topic.detail)
   .get('/', topic.getList)
   .delete('/:id', topic.del)

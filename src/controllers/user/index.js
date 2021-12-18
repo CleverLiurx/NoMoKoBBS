@@ -59,9 +59,9 @@ class Controller extends BaseController {
 
   login = async ctx => {
     // rsa解析
-    // const { phone, password } = await checkTicket(ctx.request.body.text)
+    const { phone, password } = await checkTicket(ctx.request.body.text)
     // 模拟
-    const { phone, password } = ctx.request.body
+    // const { phone, password } = ctx.request.body
 
     if (!phone) {
       ctx.body = err('非法登录')
