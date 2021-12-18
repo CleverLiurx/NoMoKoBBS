@@ -24,7 +24,7 @@ app
   .use(session(sessionConfig, app))
   .use(cors({ credentials: true }))
   .use(compress({ threshold: 2048 }))
-  .use(servStatic('./build', {
+  .use(servStatic('../build', {
     maxage: 1000 * 60 * 60 * 24 * 7
   }))
   .use(bodyParser())
