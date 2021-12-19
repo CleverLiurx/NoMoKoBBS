@@ -1,9 +1,9 @@
 import Koa from 'koa'
 import compress from 'koa-compress'
-// import bodyParser from 'koa-bodyparser'
 import koaBody from 'koa-body'
 import cors from '@koa/cors'
 import servStatic from 'koa-static'
+import path from 'path'
 import config from './config'
 import router from './router'
 import { mongoClient } from './db'
@@ -24,10 +24,10 @@ app
   .use(session(sessionConfig, app))
   .use(cors({ credentials: true }))
   .use(compress({ threshold: 2048 }))
-  .use(servStatic('../build', {
+  .use(servStatic(path.join(__dirname, '../build'), {
     maxage: 1000 * 60 * 60 * 24 * 7
   }))
-  // .use(bodyParser())
+  .use(servStatic(path.join(__dirname, '../public')))
   .use(koaBody({
     multipart: true,
     formidable: { maxFileSize: 200*1024*1024 } 

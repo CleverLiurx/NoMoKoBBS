@@ -20,7 +20,6 @@
     "ioredis": "^4.28.0",
     "koa": "^2.13.4",
     "koa-body": "^4.2.0",
-    "koa-bodyparser": "^4.3.0",
     "koa-compress": "^5.1.0",
     "koa-router": "^10.1.1",
     "koa-session": "^6.2.0",
