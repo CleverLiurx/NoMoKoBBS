@@ -16,12 +16,15 @@ const schema = new mongoose.Schema({
   },
   // 标题
   title: String,
-  // 内容
+  // 简单内容
   content: {
-    type: String,
-    required: [true, '内容不能为空']
+    type: String
   },
-  // 图片
+  // 富文本内容
+  richContent: {
+    type: String
+  },
+  // 简单内容带的图片
   topicImage: [
     {
       name: String,

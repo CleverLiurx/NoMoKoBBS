@@ -8,7 +8,7 @@ class Controller extends BaseController {
   }
 
   add = async ctx => {
-    const { classFrom, title, content, topicImage, anon } = ctx.request.body
+    const { classFrom, title, content, topicImage, richContent } = ctx.request.body
 
     // 校验板块存在
     const classRecord = await Classes.findById(classFrom)
@@ -18,7 +18,8 @@ class Controller extends BaseController {
     }
 
     const { userId: createBy } = await utils.parseSess(ctx)
-    const result = await new this._model({ classFrom, createBy, title, content, topicImage, anon }).save()
+    const option = content ? { content, topicImage } : { richContent, title }
+    const result = await new this._model({ classFrom, createBy, anon, ...option }).save()
     ctx.body = res(result)
   }
 
