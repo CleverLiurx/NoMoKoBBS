@@ -55,7 +55,7 @@ const schema = new mongoose.Schema({
 }, { timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' }, toJSON: { virtuals: true } })
 
 schema.pre('find', function() {
-  this.find({ delFlag: false }).populate('createBy', '_id username sex avator')
+  this.find({ delFlag: false }).populate('createBy', '_id username sex avator').sort({'createTime': -1})
 })
 
 schema.virtual('reply', {

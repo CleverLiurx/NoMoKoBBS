@@ -23,7 +23,7 @@ class Controller extends BaseController {
     // pid不存在：说明是一级回复
     if (!pid) {
       await Topic.findByIdAndUpdate(topicId, { repliedBy: createBy, repliedTime: new Date() })
-      result = await new this._model({ topicId, content, createBy, hasChild: true }).save()
+      await new this._model({ topicId, content, createBy, hasChild: true }).save()
     } else {
       // 二级回复：查找是否存在一级回复
       const replyRecord = await this._model.findById(pid)
@@ -31,9 +31,18 @@ class Controller extends BaseController {
         ctx.body = err('回复不存在')
         return
       }
-      result = await this._model({ content, pid, createBy }).save() // 二级回复不保存topicId
+      await this._model({ content, pid, createBy }).save() // 二级回复不保存topicId
     }
 
+    result = await this._model.find({ topicId }).populate({ path: 'reply', populate: { path: 'reply' } })
+
+    ctx.body = res(result)
+  }
+
+  getList = async ctx => {
+    let { topicId } = ctx.request.params
+
+    const result = await this._model.find({ topicId }).populate({ path: 'reply', populate: { path: 'reply' } })
     ctx.body = res(result)
   }
 }

@@ -6,6 +6,7 @@ const router = koaRouter()
 
 router
   .post('/', reply.add)
+  .get('/:topicId', reply.getList)
   .delete('/:id', reply.del)
   .patch('/hide/:id', reply.hide)
 
