@@ -12,12 +12,14 @@ import session from 'koa-session'
 import { sessionConfig, sessionSigned } from './config/session'
 import catchError from './middlewares/catcherror'
 import logger from './middlewares/log'
+import history from 'koa-connect-history-api-fallback'
 
 const app = new Koa()
 
 app.keys = sessionSigned
 
 app
+  .use(history({ whiteList: ['/api'] }))
   .use(logger())
   .use(catchError())
   .use(intercept())
