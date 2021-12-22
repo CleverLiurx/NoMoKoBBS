@@ -18,8 +18,8 @@ class Controller extends BaseController {
     }
 
     const { userId: createBy } = await utils.parseSess(ctx)
-    const option = content ? { content, topicImage } : { richContent, title }
-    const result = await new this._model({ classFrom, createBy, anon, ...option }).save()
+    const option = richContent ? { richContent, title } : { topicImage }
+    const result = await new this._model({ classFrom, createBy, content, ...option }).save()
     ctx.body = res(result)
   }
 
