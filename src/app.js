@@ -12,7 +12,7 @@ import session from 'koa-session'
 import { sessionConfig, sessionSigned } from './config/session'
 import catchError from './middlewares/catcherror'
 import logger from './middlewares/log'
-import history from 'koa-connect-history-api-fallback'
+import history from 'koa2-connect-history-api-fallback'
 
 const app = new Koa()
 
