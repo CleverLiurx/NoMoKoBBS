@@ -4,7 +4,7 @@ import { utils } from '../../plugins'
 
 // 路由为/api/v1/un_auth的接口
 const isUnAuth = ctx => {
-  return ctx.request.url.indexOf('/api/v1/un_auth') > -1 || ctx.request.method == 'GET'
+  return ctx.request.url.indexOf('/api/v1/un_auth') > -1 || ctx.request.method == 'GET' && ctx.request.url !== '/api/v1/user'
 }
 
 // 接口请求(/api/v1, 非静态资源)

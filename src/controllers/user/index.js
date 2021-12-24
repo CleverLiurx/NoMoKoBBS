@@ -132,7 +132,6 @@ class Controller extends BaseController {
       const { userId } = await utils.parseSess(ctx)
       _id = userId
     }
-
     const user = await this._model.findById(_id).populate('record').select('-password -salt')
     ctx.body = res(user)
   }

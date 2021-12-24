@@ -26,6 +26,10 @@ router.post('/sms', async ctx => {
   let result
   const { phone } = ctx.request.body
 
+  if (!/^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/.test(phone)) {
+    ctx.body = err('请输入合法的手机号')
+    return
+  }
   // 获取短信验证码
   const smsKey = smsCodeKey(phone)
   const smsCode = await redis.get(smsKey)
