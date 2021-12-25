@@ -25,6 +25,12 @@ class Controller extends BaseController {
     const result = await this._model.find({})
     ctx.body = res(result)
   }
+  
+  detail = async ctx => {
+    const { id } = ctx.request.params
+    const result = await this._model.findById(id)
+    ctx.body = res(result)
+  }
 }
 
 export default new Controller

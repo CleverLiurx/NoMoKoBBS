@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 import Record from '../record'
 import Star from '../star'
 import Parise from '../parise'
+import Classes from '../classes'
 
 const schema = new mongoose.Schema({
   // 所属板块
@@ -174,6 +175,7 @@ schema.post('find', async function (docs) {
 
 schema.post('save', async function () {
   await Record.findOneAndUpdate({ createBy: this.createBy }, { $inc: { topicCount: 1 } })
+  await Classes.findOneAndUpdate({ _id: this.classFrom }, { $inc: { topicCount: 1 }})
 })
 
 const Model = mongoose.model('topics', schema)
