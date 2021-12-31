@@ -55,7 +55,7 @@ class Controller extends BaseController {
     }
 
     let inc = !pariseRecord || !pariseRecord.status ? 1 : -1
-    let result = await Topic.findByIdAndUpdate(topicId, { $inc: { praiseCount: inc } }, { new: true }).populate('createBy', '_id username sex avator').populate('classFrom', '_id classname') // 帖子的点赞数+-1
+    let result = await Topic.findByIdAndUpdate(topicId, { $inc: { praiseCount: inc } }, { new: true }).populate({ path: 'createBy', select: '_id username sex avator', populate: "record" }).populate('classFrom', '_id classname') // 帖子的点赞数+-1
     await Record.findOneAndUpdate({ createBy }, { $inc: { praiseCount: inc } }) // 用户的点赞数+-1
     await Record.findOneAndUpdate({ createBy: topicRecord.createBy }, { $inc: { bePraiseCount: inc } }) // 用户的被点赞数+-1
     return res(result)
