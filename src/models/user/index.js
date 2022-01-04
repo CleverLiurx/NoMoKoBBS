@@ -39,7 +39,7 @@ const schema = new mongoose.Schema({
   // 头像
   avator: {
     type: String,
-    default: 'xxxxx.jpg'
+    default: 'https://avatars.githubusercontent.com/u/51957633?v=4'
   },
   // 用户记录
   record: {
