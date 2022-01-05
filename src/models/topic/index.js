@@ -89,7 +89,7 @@ const schema = new mongoose.Schema({
 }, { timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' }, toJSON: { virtuals: true } })
 
 schema.pre('findOne', function() {
-  this.findOne({ delFlag: false }).populate({ path: 'createBy',select: '_id username sex avator record', populate: { path: 'record', select: 'beCommentCount bePraiseCount beStarCount commentCount praiseCount starCount topicCount' } }).populate('classFrom', '_id classname')
+  this.findOne({ delFlag: false }).populate({ path: 'createBy',select: '_id username sex avator record' }).populate('classFrom', '_id classname')
 })
 schema.pre('find', function() {
   this.find({ delFlag: false }).populate('createBy', '_id username sex avator').populate('classFrom', '_id classname')

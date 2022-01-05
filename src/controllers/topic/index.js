@@ -25,13 +25,12 @@ class Controller extends BaseController {
 
   detail = async ctx => {
     const { id } = ctx.request.params
-    const result = await this._model.findById(id).populate({ path: 'reply', populate: { path: 'reply' } })
+    const result = await this._model.findById(id)
     ctx.body = res(result)
   }
 
   getList = async ctx => {
     const { classFrom, createBy, sort = 'createTime', page = 1, limit = 10} = ctx.query
-    // sort: repliedTime hitsCount replyCount praiseCount starCount
     let filter = {}
     if (classFrom) {
       filter.classFrom = classFrom
