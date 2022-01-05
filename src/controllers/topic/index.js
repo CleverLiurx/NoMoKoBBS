@@ -1,5 +1,5 @@
 import BaseController from '../base-controller'
-import { Topic, Classes } from '../../models'
+import { Topic, Classes, Star } from '../../models'
 import { utils, res, err } from '../../plugins'
 
 class Controller extends BaseController {

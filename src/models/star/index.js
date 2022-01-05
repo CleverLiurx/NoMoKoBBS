@@ -18,6 +18,10 @@ const schema = new mongoose.Schema({
   }
 }, { timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' } })
 
+schema.pre('find', function() {
+  this.find({ status: 1 }).populate('topicId', 'title content _id')
+})
+
 const Model = mongoose.model('stars', schema)
 
 export default Model

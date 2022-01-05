@@ -33,6 +33,12 @@ class Controller extends BaseController {
 
     ctx.body = res(topic)
   }
+
+  getList = async ctx => {
+    const { userId } = ctx.query
+    const data = await this._model.find({ createBy: userId })
+    ctx.body = res(data)
+  }
 }
 
 export default new Controller
