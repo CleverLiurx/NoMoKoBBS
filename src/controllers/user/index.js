@@ -135,6 +135,13 @@ class Controller extends BaseController {
     const user = await this._model.findById(_id).populate('record').select('-password -salt')
     ctx.body = res(user)
   }
+
+  update = async ctx => {
+    const { userId } = await utils.parseSess(ctx)
+    const { username, sex, birthday, email } = ctx.request.body
+    await this._model.findOneAndUpdate({ _id: userId }, { username, sex, birthday, email })
+    ctx.body = res()
+  }
 }
 
 export default new Controller

@@ -12,14 +12,14 @@ const schema = new mongoose.Schema({
   username: {
     type: String,
     unique: true,
-    required: [true, '用户名不能为空']
+    required: [true, '用户名不能为空'],
+    minlength: 2,
+    maxlength: 10
   },
   // 8位密码盐值
   salt: {
     type: String,
-    required: true,
-    minlength: 8,
-    maxlength: 8
+    required: true
   },
   // 密码
   password: {
@@ -29,7 +29,10 @@ const schema = new mongoose.Schema({
   // 邮箱
   email: String,
   // 生日
-  birthday: String,
+  birthday: {
+    type: String,
+    default: '2000-01-01'
+  },
   // 性别 1-男 0-女
   sex: {
     type: Number,
