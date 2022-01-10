@@ -31,8 +31,11 @@ app
   }))
   .use(servStatic(path.join(__dirname, '../public')))
   .use(koaBody({
-    multipart: true,
-    formidable: { maxFileSize: 200*1024*1024 } 
+    multipart: true, // 支持文件上传
+    formidable: {
+      maxFieldsSize: 2 * 1024 * 1024, // 最大为2兆
+      multipart: true // 支持 multipart-formdate 的表单
+    } 
   }))
   .use(router.routes())
 
