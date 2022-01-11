@@ -138,8 +138,8 @@ class Controller extends BaseController {
 
   update = async ctx => {
     const { userId } = await utils.parseSess(ctx)
-    const { username, sex, birthday, email } = ctx.request.body
-    await this._model.findOneAndUpdate({ _id: userId }, { username, sex, birthday, email })
+    const { username, sex, birthday, email, avator } = ctx.request.body
+    await this._model.findOneAndUpdate({ _id: userId }, { username, sex, birthday, email, avator })
     ctx.body = res()
   }
 }
