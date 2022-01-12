@@ -25,7 +25,11 @@ router.post("/", async (ctx) => {
   const fileName = file.path.split("/").pop();
   fs.renameSync(file.path, `${filePath}${fileName}.${fileType}`);
 
-  ctx.body = res({ url: `/image/${fileName}.${fileType}` });
+  let result = { url: `/image/${fileName}.${fileType}`, alt: "", href: "" };
+  if (ctx.request.body.returnArray) {
+    result = [result];
+  }
+  ctx.body = res(result);
 });
 
 export default router;
