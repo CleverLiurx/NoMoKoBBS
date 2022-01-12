@@ -1,11 +1,9 @@
-import koaRouter from 'koa-router'
+import koaRouter from "koa-router";
 
-import { star } from '../../../controllers'
+import { star } from "../../../controllers";
 
-const router = koaRouter()
+const router = koaRouter();
 
-router
-  .patch('/', star.update)
-  .get('/', star.getList)
+router.patch("/", star.update).get("/", star.getList);
 
-export default router
+export default router;

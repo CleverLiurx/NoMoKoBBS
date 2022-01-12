@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
 
 const schema = new mongoose.Schema({
   // 用户id
@@ -18,11 +18,11 @@ const schema = new mongoose.Schema({
   // 请求数据
   content: String,
   // 状态
-  status: String
-})
+  status: String,
+});
 
-const Model = mongoose.model('logs', schema)
+const Model = mongoose.model("logs", schema);
 
-const save = async data => await new Model(data).save()
+const save = async (data) => await new Model(data).save();
 
-export default save
+export default save;

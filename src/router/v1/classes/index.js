@@ -1,12 +1,12 @@
-import koaRouter from 'koa-router'
+import koaRouter from "koa-router";
 
-import { classes } from '../../../controllers'
+import { classes } from "../../../controllers";
 
-const router = koaRouter()
+const router = koaRouter();
 
 router
-  .post('/', classes.add)
-  .get('/', classes.getList)
-  .get('/:id', classes.detail)
+  .post("/", classes.add)
+  .get("/", classes.getList)
+  .get("/:id", classes.detail);
 
-export default router
+export default router;

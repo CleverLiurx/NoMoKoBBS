@@ -1,78 +1,81 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
 
-const schema = new mongoose.Schema({
-  // 手机号：登录
-  phone: {
-    type: String,
-    required: true,
-    unique: [true, '手机号已经被注册啦'],
-    index: true
+const schema = new mongoose.Schema(
+  {
+    // 手机号：登录
+    phone: {
+      type: String,
+      required: true,
+      unique: [true, "手机号已经被注册啦"],
+      index: true,
+    },
+    // 用户名：昵称
+    username: {
+      type: String,
+      unique: true,
+      required: [true, "用户名不能为空"],
+      minlength: 2,
+      maxlength: 10,
+    },
+    // 8位密码盐值
+    salt: {
+      type: String,
+      required: true,
+    },
+    // 密码
+    password: {
+      type: String,
+      required: true,
+    },
+    // 邮箱
+    email: String,
+    // 生日
+    birthday: {
+      type: String,
+      default: "2000-01-01",
+    },
+    // 性别 1-男 0-女
+    sex: {
+      type: Number,
+      enum: [0, 1],
+      default: 1,
+    },
+    // 头像
+    avator: {
+      type: String,
+      default: "/image/default-header.jpeg",
+    },
+    // 用户记录
+    record: {
+      type: mongoose.Types.ObjectId,
+      ref: "records",
+    },
+    // 关联学校的学号
+    studentId: {
+      type: mongoose.Types.ObjectId,
+      unique: true,
+      ref: "school",
+    },
+    // 是否为版主
+    isSectioner: {
+      type: Number,
+      enum: [0, 1],
+      default: 1,
+    },
+    // 显示状态 true-正常 false-存在但不显示信息
+    status: {
+      type: Boolean,
+      default: true,
+    },
+    // 删除状态 1-删除
+    delFlag: {
+      type: Boolean,
+      default: false,
+    },
   },
-  // 用户名：昵称
-  username: {
-    type: String,
-    unique: true,
-    required: [true, '用户名不能为空'],
-    minlength: 2,
-    maxlength: 10
-  },
-  // 8位密码盐值
-  salt: {
-    type: String,
-    required: true
-  },
-  // 密码
-  password: {
-    type: String,
-    required: true
-  },
-  // 邮箱
-  email: String,
-  // 生日
-  birthday: {
-    type: String,
-    default: '2000-01-01'
-  },
-  // 性别 1-男 0-女
-  sex: {
-    type: Number,
-    enum: [0, 1],
-    default: 1
-  },
-  // 头像
-  avator: {
-    type: String,
-    default: '/image/default-header.jpeg'
-  },
-  // 用户记录
-  record: {
-    type: mongoose.Types.ObjectId,
-    ref: 'records'
-  },
-  // 关联学校的学号
-  studentId: {
-    type: mongoose.Types.ObjectId,
-    unique: true,
-    ref: 'school'
-  },
-  // 是否为版主
-  isSectioner: {
-    type: Number,
-    enum: [0, 1],
-    default: 1
-  },
-  // 显示状态 true-正常 false-存在但不显示信息
-  status: {
-    type: Boolean,
-    default: true
-  },
-  // 删除状态 1-删除
-  delFlag: {
-    type: Boolean,
-    default: false
-  }
-}, { timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' } })
+  { timestamps: { createdAt: "createTime", updatedAt: "updateTime" } }
+);
 
-const Model = mongoose.model('users', schema)
+const Model = mongoose.model("users", schema);
 
-export default Model
+export default Model;

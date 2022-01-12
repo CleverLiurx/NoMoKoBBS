@@ -1,13 +1,13 @@
-import koaRouter from 'koa-router'
+import koaRouter from "koa-router";
 
-import { reply } from '../../../controllers'
+import { reply } from "../../../controllers";
 
-const router = koaRouter()
+const router = koaRouter();
 
 router
-  .post('/', reply.add)
-  .get('/:topicId', reply.getList)
-  .delete('/:id', reply.del)
-  .patch('/hide/:id', reply.hide)
+  .post("/", reply.add)
+  .get("/:topicId", reply.getList)
+  .delete("/:id", reply.del)
+  .patch("/hide/:id", reply.hide);
 
-export default router
+export default router;

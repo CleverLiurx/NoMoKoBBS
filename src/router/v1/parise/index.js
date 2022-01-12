@@ -1,10 +1,9 @@
-import koaRouter from 'koa-router'
+import koaRouter from "koa-router";
 
-import { parise } from '../../../controllers'
+import { parise } from "../../../controllers";
 
-const router = koaRouter()
+const router = koaRouter();
 
-router
-  .patch('/', parise.update)
+router.patch("/", parise.update);
 
-export default router
+export default router;

@@ -1,12 +1,12 @@
-import koaRouter from 'koa-router'
+import koaRouter from "koa-router";
 
-import { user } from '../../../controllers'
+import { user } from "../../../controllers";
 
-const router = koaRouter()
+const router = koaRouter();
 
 router
-  .get('/', user.getUserInfo)
-  .get('/logout', user.logout)
-  .put('/', user.update)
+  .get("/", user.getUserInfo)
+  .get("/logout", user.logout)
+  .put("/", user.update);
 
-export default router
+export default router;

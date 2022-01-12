@@ -1,17 +1,20 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
 
-const schema = new mongoose.Schema({
-  nameCh: {
-    type: String,
-    required: true
+const schema = new mongoose.Schema(
+  {
+    nameCh: {
+      type: String,
+      required: true,
+    },
+    nameEn: {
+      type: String,
+      required: true,
+    },
+    value: Number,
   },
-  nameEn: {
-    type: String,
-    required: true
-  },
-  value: Number
-}, { timestamps: { createdAt: 'createTime', updatedAt: 'updateTime' } })
+  { timestamps: { createdAt: "createTime", updatedAt: "updateTime" } }
+);
 
-const Model = mongoose.model('sys', schema)
+const Model = mongoose.model("sys", schema);
 
-export default Model
+export default Model;
