@@ -55,9 +55,18 @@ class Controller extends BaseController {
       sort = "createTime",
       page = 1,
       limit = 10,
+      kw = ""
     } = ctx.query;
 
-    let filter = { isFocus: { $ne: true } };
+    // 生成keywords
+    const regList = []
+    const keyList = kw.split(' ')
+    keyList.forEach(item => {
+      const reg = new RegExp(item, 'i')
+      regList.push({ title: { $regex: reg } })
+    })
+
+    let filter = { isFocus: { $ne: true }, $or: regList };
     if (classFrom) {
       filter.classFrom = classFrom;
     }
