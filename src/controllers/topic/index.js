@@ -36,6 +36,19 @@ class Controller extends BaseController {
   };
 
   getList = async (ctx) => {
+    const { isFocus = false } = ctx.query;
+    let result;
+
+    if (isFocus) {
+      result = await this.getFocus(ctx);
+    } else {
+      result = await this.getTopic(ctx);
+    }
+
+    ctx.body = res(result);
+  };
+
+  getTopic = async (ctx) => {
     const {
       classFrom,
       createBy,
@@ -43,7 +56,8 @@ class Controller extends BaseController {
       page = 1,
       limit = 10,
     } = ctx.query;
-    let filter = {};
+
+    let filter = { isFocus: { $ne: true } };
     if (classFrom) {
       filter.classFrom = classFrom;
     }
@@ -55,7 +69,12 @@ class Controller extends BaseController {
       .sort({ [sort]: -1 })
       .skip((page - 1) * parseInt(limit))
       .limit(parseInt(limit));
-    ctx.body = res(result);
+    return result;
+  };
+
+  getFocus = async (ctx) => {
+    const result = await this._model.find({ isFocus: true });
+    return result;
   };
 }
 

@@ -33,6 +33,11 @@ const schema = new mongoose.Schema(
         url: String,
       },
     ],
+    focusUrl: String,
+    isFocus: {
+      type: Boolean,
+      default: false
+    },
     // 点击数
     hitsCount: {
       type: Number,
