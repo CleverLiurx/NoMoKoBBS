@@ -1,48 +1,12 @@
-# NoMoKoBBS
-一个由NodeJS/MongoDB/Koa2完成的BBS论坛后台服务
+## 关于
 
-## 启动
-```cmd
-npm install #安装依赖
-npm run build #打包
-npm run start #本地启动
-npm run dev #测试环境启动
-npm run prod #线上部署
+我是一个研一前端小菜鸡\
+这是我的博客[<传送地址>](https://www.bayuechuqi.com)
 
-# /build为前端代码
-# /dist为后端打包后的代码
-```
+## 技术栈
 
-## 模块介绍
-
-### session模块
-1. 登录成功
-    - 签发携带`userId` 和`loginTime`的session(koa-session也使用了redis存储)
-    - 额外在redis中以`login_userId:session`形式存储一份
-2. 请求接口/api/v1/!un_auth
-    - 从cookies中获取sessionId
-    - 由sessionId读取`userId` 和`loginTime`(从koa-session中)
-    - 由key`login_userId`读取redis中的`loginTime`
-    - 对比两个登录时间是否一致
-    - 如果一致，刷新kos-session的有效时间，放行
-    - 如果不一致，说明有其他用户登录
-3. 请求接口/api/v1/un_auth/*或非api
-    - 放行
-
-### 验证码模块
-1. 更具手机号获取图片验证码，redis中存储，有效期15分钟
-2. 根据手机号和图片验证码发送短信验证码
-3. 如果图片验证码正确，则发送短信，并在redis中记录此手机号发送短信时间，防止频繁请求
-4. 如果图片验证码不正确则拒绝
-
-### 登录模块
-1. 获取登录包，含rsa公钥和ticket
-2. 根据rsa公钥对ticket/手机号/密码进行RAS加密
-3. 后端根据rsa私钥进行解密获取ticket/手机号/密码
-4. 进行ticket验证，包括时间戳和ticket真实性检验
-5. 由redis对手机号和ticket进行重写验证：查找此手机号对应的ticket，如果不存在或者查到的ticket与要验证的不相等，则通过，然后redis中存储`ticket_phone:ticket`
-6. 4和5都通过则安全验证完成，接下来验证账号密码，然后是业务处理
-
+前端：`React17`、`antd`、`typesctipt` >>> [GitHub](https://github.com/CleverLiurx/ReRdRoBBS) [gitee](https://gitee.com/CleverLiurx/ReRdRoBBS)\
+后端：`Node`、`Koa2`、`MongoDB` >>> [GitHub](https://github.com/CleverLiurx/NoMoKoBBS) [gitee](https://gitee.com/CleverLiurx/NoMoKoBBS)
 
 ## git 表情
 
