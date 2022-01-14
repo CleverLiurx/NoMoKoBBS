@@ -6,5 +6,6 @@ import Star from "./star";
 import Topic from "./topic";
 import User from "./user";
 import Search from "./search";
+import Terminal from "./terminal";
 
-export { Classes, Parise, Record, Reply, Star, Topic, User, Search };
+export { Classes, Parise, Record, Reply, Star, Topic, User, Search, Terminal };
