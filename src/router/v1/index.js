@@ -8,6 +8,7 @@ import reply from "./reply";
 import star from "./star";
 import parise from "./parise";
 import file from "./file";
+import search from "./search";
 
 const router = koaRouter();
 
@@ -19,6 +20,7 @@ router
   .use("/reply", reply.routes())
   .use("/star", star.routes())
   .use("/parise", parise.routes())
-  .use("/file", file.routes());
+  .use("/file", file.routes())
+  .use("/search", search.routes());
 
 export default router;

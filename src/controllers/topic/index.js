@@ -1,5 +1,5 @@
 import BaseController from "../base-controller";
-import { Topic, Classes, Star } from "../../models";
+import { Topic, Classes, Search } from "../../models";
 import { utils, res, err } from "../../plugins";
 
 class Controller extends BaseController {
@@ -55,16 +55,17 @@ class Controller extends BaseController {
       sort = "createTime",
       page = 1,
       limit = 10,
-      kw = ""
+      kw = "",
     } = ctx.query;
 
     // 生成keywords
-    const regList = []
-    const keyList = kw.split(' ')
-    keyList.forEach(item => {
-      const reg = new RegExp(item, 'i')
-      regList.push({ title: { $regex: reg } })
-    })
+    const regList = [];
+    const keyList = kw.split(" ");
+    keyList.forEach(async (item) => {
+      const reg = new RegExp(item, "i");
+      regList.push({ title: { $regex: reg } });
+      await this.addKeywords(item);
+    });
 
     let filter = { isFocus: { $ne: true }, $or: regList };
     if (classFrom) {
@@ -84,6 +85,17 @@ class Controller extends BaseController {
   getFocus = async (ctx) => {
     const result = await this._model.find({ isFocus: true });
     return result;
+  };
+
+  addKeywords = async (kw) => {
+    if (!kw) {
+      return;
+    }
+    await Search.findOneAndUpdate(
+      { keywords: kw },
+      { $inc: { count: 1 } },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
   };
 }
 
