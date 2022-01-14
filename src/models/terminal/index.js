@@ -13,10 +13,7 @@ const schema = new mongoose.Schema(
       default: [],
     },
     // 描述
-    description: {
-      type: [String],
-      default: [],
-    },
+    description: String,
     // 举例
     example: {
       type: String,
@@ -30,7 +27,7 @@ const schema = new mongoose.Schema(
     // 删除状态 true-删除
     delFlag: {
       type: Boolean,
-      default: false,
+      default: true,
     },
   },
   { timestamps: { createdAt: "createTime", updatedAt: "updateTime" } }
