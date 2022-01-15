@@ -139,7 +139,6 @@ class Controller extends BaseController {
       .findById(_id)
       .populate("record")
       .select("-password -salt");
-    console.log(user)
     ctx.body = res(user);
   };
 
