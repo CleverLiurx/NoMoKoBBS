@@ -2,12 +2,6 @@ import mongoose from "mongoose";
 
 const schema = new mongoose.Schema(
   {
-    // 用户
-    createBy: {
-      type: mongoose.Types.ObjectId,
-      ref: "users",
-      unique: true,
-    },
     // 发帖数
     topicCount: {
       type: Number,

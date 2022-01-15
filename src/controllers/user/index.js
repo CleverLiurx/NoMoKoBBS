@@ -37,13 +37,13 @@ class Controller extends BaseController {
       redis.del(key); // 删除验证码120s限制
       const salt = Math.random().toString(36).slice(-8); // 生成8位密码盐值
       const hash = md5("liurx" + password + salt); // 生成数据库密码密文
+      const { _id } = await new Record({}).save();
       const newUser = await new this._model({
         ...ctx.request.body,
         password: hash,
         salt,
+        record: _id.toString()
       }).save(); // 保存
-      await new Record({ createBy: newUser._id }).save();
-
       const timeKey = loginTimeKey(newUser._id.toString());
       // redis中存储登录时间
       const time = +new Date();
@@ -139,6 +139,7 @@ class Controller extends BaseController {
       .findById(_id)
       .populate("record")
       .select("-password -salt");
+    console.log(user)
     ctx.body = res(user);
   };
 

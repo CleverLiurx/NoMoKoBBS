@@ -58,9 +58,8 @@ const schema = new mongoose.Schema(
     },
     // 是否为版主
     isSectioner: {
-      type: Number,
-      enum: [0, 1],
-      default: 1,
+      type: Boolean,
+      default: false,
     },
     // 显示状态 true-正常 false-存在但不显示信息
     status: {
@@ -69,6 +68,11 @@ const schema = new mongoose.Schema(
     },
     // 删除状态 1-删除
     delFlag: {
+      type: Boolean,
+      default: false,
+    },
+    // 管理员
+    isAdmin: {
       type: Boolean,
       default: false,
     },
