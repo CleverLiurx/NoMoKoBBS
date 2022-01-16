@@ -58,22 +58,28 @@ class Controller extends BaseController {
       kw = "",
     } = ctx.query;
 
-    // 生成keywords
-    const regList = [];
-    const keyList = kw.split(" ");
-    keyList.forEach(async (item) => {
-      const reg = new RegExp(item, "i");
-      regList.push({ title: { $regex: reg } });
-      await this.addKeywords(item);
-    });
+    let filter = {};
 
-    let filter = { isFocus: { $ne: true }, $or: regList };
+    if (kw) {
+      // 生成keywords
+      const regList = [];
+      const keyList = kw.split(" ");
+      keyList.forEach(async (item) => {
+        const reg = new RegExp(item, "i");
+        regList.push({ title: { $regex: reg } });
+        await this.addKeywords(item);
+        filter = { $or: regList };
+      });
+    }
+
     if (classFrom) {
       filter.classFrom = classFrom;
     }
     if (createBy) {
       filter.createBy = createBy;
     }
+    filter.isFocus = { $ne: true };
+    
     const result = await this._model
       .find(filter)
       .sort({ [sort]: -1 })
