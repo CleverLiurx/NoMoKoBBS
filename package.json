@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "build": "if [ -d ./dist ]; then rm -rf dist; fi && babel src -d dist && cp -rf src/plugins/rsa/key dist/plugins/rsa/key",
-    "start": "cross-env NODE_ENV=development nodemon src/app.js",
+    "start": "cross-env NODE_ENV=development nodemon src/app.js --ignore src/assets",
     "dev": "PORT=5000 pm2 start pm2.config.js --env development",
     "prod": "PORT=5000 pm2 start pm2.config.js --env production"
   },
@@ -32,6 +32,7 @@
     "mysql": "^2.15.0",
     "node-rsa": "^1.1.1",
     "pm2": "^2.2.3",
+    "qiniu": "^6.1.13",
     "svg-captcha": "^1.4.0",
     "tencentcloud-sdk-nodejs": "^4.0.233"
   },

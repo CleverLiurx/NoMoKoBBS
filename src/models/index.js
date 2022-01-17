@@ -7,5 +7,17 @@ import Topic from "./topic";
 import User from "./user";
 import Search from "./search";
 import Terminal from "./terminal";
+import File from "./file";
 
-export { Classes, Parise, Record, Reply, Star, Topic, User, Search, Terminal };
+export {
+  Classes,
+  Parise,
+  Record,
+  Reply,
+  Star,
+  Topic,
+  User,
+  Search,
+  Terminal,
+  File,
+};

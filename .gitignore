@@ -105,3 +105,6 @@ typings/
 # build内静态资源
 /build/*
 /dist/*
+
+# 临时上传文件
+/temp/*
