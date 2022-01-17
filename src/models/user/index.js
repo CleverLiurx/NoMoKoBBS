@@ -43,7 +43,7 @@ const schema = new mongoose.Schema(
     // 头像
     avator: {
       type: String,
-      default: "http://cdn.bayuechuqi.com/upload_776383f16724e1a3bd793657ee3eb0a1",
+      default: "http://cdn.bayuechuqi.com/upload_776383f16724e1a3bd793657ee3eb0a1?imageslim",
     },
     // 用户记录
     record: {

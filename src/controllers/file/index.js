@@ -11,7 +11,7 @@ class Controller extends BaseController {
   }
 
   upload = async (ctx) => {
-    const { href = "", alt = "" } = ctx.request.body;
+    const { href = "", alt = "", slim = true } = ctx.request.body;
     // 获取文件
     const file = ctx.request.files && ctx.request.files.file;
     if (!file) {
@@ -28,9 +28,9 @@ class Controller extends BaseController {
     // 上传到七牛云
     const url = await uploadFile(localFile, fileName);
 
-    // 数据库记录
+    // 数据库记录 
     const fileRecord = {
-      url,
+      url: slim ? url + "?imageslim" : url,
       href,
       alt,
       filename: file.name,
