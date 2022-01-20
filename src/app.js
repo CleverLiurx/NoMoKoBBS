@@ -26,12 +26,7 @@ app
   .use(session(sessionConfig, app))
   .use(cors({ credentials: true }))
   .use(compress({ threshold: 2048 }))
-  .use(
-    servStatic(path.join(__dirname, "../build"), {
-      maxage: 1000 * 60 * 60 * 24 * 7,
-    })
-  )
-  // .use(servStatic(path.join(__dirname, "../public")))
+  .use(servStatic(path.join(__dirname, "../build")))
   .use(
     koaBody({
       multipart: true, // 支持文件上传
