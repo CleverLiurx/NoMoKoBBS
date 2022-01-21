@@ -2,8 +2,19 @@ import koaRouter from "koa-router";
 import { creatCaptcha, sendSms, err, res } from "../../../plugins";
 import { redis, imgCodeKey, smsCodeKey } from "../../../db";
 import { user } from "../../../controllers";
+import ratelimit from "koa-ratelimit"
 
 const router = koaRouter();
+
+// 防止暴力破机验证码
+const phoneBasedRatelimit = ratelimit({  
+  db: redis,
+  duration: 60000,
+  max: 10,
+  id: (ctx) => {
+    return ctx.request.body.phone;
+  }
+});
 
 // !!!此路由为不进行权限验证的api: 获取图片验证码 发送短信验证码 注册 登录
 
@@ -55,7 +66,7 @@ router.post("/sms", async (ctx) => {
 /**
  * 注册
  */
-router.post("/register", user.register);
+router.post("/register", phoneBasedRatelimit, user.register);
 
 /**
  * 获取rsa包

@@ -13,12 +13,14 @@ import { sessionConfig, sessionSigned } from "./config/session";
 import catchError from "./middlewares/catcherror";
 import logger from "./middlewares/log";
 import history from "koa2-connect-history-api-fallback";
+import helmet from "koa-helmet"
 
 const app = new Koa();
 
 app.keys = sessionSigned;
 
 app
+  .use(helmet())
   .use(history({ whiteList: ["/api"] }))
   .use(logger())
   .use(catchError())

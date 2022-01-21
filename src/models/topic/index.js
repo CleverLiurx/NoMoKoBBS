@@ -36,7 +36,7 @@ const schema = new mongoose.Schema(
     focusUrl: String,
     isFocus: {
       type: Boolean,
-      default: false
+      default: false,
     },
     // 点击数
     hitsCount: {
@@ -73,7 +73,7 @@ const schema = new mongoose.Schema(
     // 删除状态 1-删除
     delFlag: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     // 热门回复
     hotReply: {
@@ -130,7 +130,8 @@ schema.post("findOne", async function (doc) {
     // 如果被屏蔽
     if (!doc.status) {
       doc.content = "**** 涉嫌违规 **** 已被屏蔽 ****";
-      // doc.content = doc.content.slice(0, 2) + '**********'
+      doc.title = "";
+      doc.topicImage = [];
     }
 
     // 看自己是否收藏
@@ -163,7 +164,8 @@ schema.post("findOneAndUpdate", async function (doc) {
     // 如果被屏蔽
     if (!doc.status) {
       doc.content = "**** 涉嫌违规 **** 已被屏蔽 ****";
-      // doc.content = doc.content.slice(0, 2) + '**********'
+      doc.title = "";
+      doc.topicImage = [];
     }
 
     // 看自己是否收藏
@@ -194,6 +196,12 @@ schema.post("findOneAndUpdate", async function (doc) {
 
 schema.post("find", async function (docs) {
   for (let doc of docs) {
+    // 如果被屏蔽
+    if (!doc.status) {
+      doc.content = "**** 涉嫌违规 **** 已被屏蔽 ****";
+      doc.title = "";
+      doc.topicImage = [];
+    }
     // 看自己是否收藏
     const starRecord = await Star.findOne({
       createBy: doc.createBy._id,

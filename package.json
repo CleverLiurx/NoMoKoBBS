@@ -21,6 +21,8 @@
     "koa": "^2.13.4",
     "koa-body": "^4.2.0",
     "koa-compress": "^5.1.0",
+    "koa-helmet": "^6.1.0",
+    "koa-ratelimit": "^5.0.1",
     "koa-router": "^10.1.1",
     "koa-session": "^6.2.0",
     "koa-static": "^5.0.0",
@@ -34,7 +36,8 @@
     "pm2": "^2.2.3",
     "qiniu": "^6.1.13",
     "svg-captcha": "^1.4.0",
-    "tencentcloud-sdk-nodejs": "^4.0.233"
+    "tencentcloud-sdk-nodejs": "^4.0.233",
+    "xss": "^1.0.10"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

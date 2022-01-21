@@ -1,6 +1,7 @@
 import BaseController from "../base-controller";
 import { Topic, Classes, Search } from "../../models";
 import { utils, res, err } from "../../plugins";
+import xss from "xss"
 
 class Controller extends BaseController {
   constructor() {
@@ -19,11 +20,11 @@ class Controller extends BaseController {
     }
 
     const { userId: createBy } = await utils.parseSess(ctx);
-    const option = richContent ? { richContent, title } : { topicImage };
+    const option = richContent ? { richContent: xss(richContent), title: xss(title) } : { topicImage };
     const result = await new this._model({
       classFrom,
       createBy,
-      content,
+      content: xss(content),
       ...option,
     }).save();
     ctx.body = res(result);
